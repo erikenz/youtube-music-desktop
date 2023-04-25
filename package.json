@@ -1,0 +1,29 @@
+{
+	"name": "youtube-music-desktop",
+	"productName": "YouTube Music",
+	"version": "1.0.0",
+	"description": "YouTube Music Desktop App",
+	"main": "src/main.ts",
+	"scripts": {
+		"dev": "electron .",
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"build": "tsc && tsc-alias",
+		"start": "npm run build && electron ./build/main.js"
+	},
+	"keywords": [
+		"youtube-music",
+		"youtube-music-desktop",
+		"ytm-desktop",
+		"ytm"
+	],
+	"author": "erikenz",
+	"license": "MIT",
+	"devDependencies": {
+		"electron": "^24.1.2",
+		"tsc-alias": "^1.8.5",
+		"typescript": "^5.0.4"
+	},
+	"dependencies": {
+		"electron-store": "^8.1.0"
+	}
+}
