@@ -1,6 +1,6 @@
 import type { MenuItemConstructorOptions } from "electron";
 import { existsSync } from "fs";
-import getAllPlugins from "@plugins/utils";
+import { getAllPlugins } from "@utils/plugins";
 import path from "path";
 import store from "./store";
 
@@ -38,11 +38,6 @@ export function getAllPluginMenu(): MenuItemConstructorOptions[] {
 		// 	return menu;
 		// }
 	});
-
-	console.log(
-		`🚀 => file: plugins.ts:26 => getAllPluginMenu => menuArray:`,
-		menuArray
-	);
 
 	return menuArray;
 }

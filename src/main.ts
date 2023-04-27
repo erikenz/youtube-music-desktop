@@ -3,7 +3,7 @@ console.log("ytm-desktop started");
 import { BrowserWindow, Menu, app, globalShortcut, ipcMain } from "electron";
 
 import defaultConfig from "@config/defaults";
-import { initializePlugins } from "@plugins/utils";
+import { initializePlugins } from "@utils/plugins";
 import path from "path";
 import { setApplicationMenu } from "./menu";
 
@@ -14,10 +14,12 @@ const createMainWindow = () => {
 		webPreferences: {
 			preload: path.join(__dirname, "preload.ts"),
 		},
+		show: false,
 	});
 
 	mainWindow.loadURL(defaultConfig.url);
-	initializePlugins();
+	mainWindow.once("ready-to-show", () => mainWindow.show());
+	initializePlugins(mainWindow);
 	setApplicationMenu(mainWindow);
 };
 

@@ -1,5 +1,6 @@
 import { lstatSync, readdirSync } from "fs";
 
+import type { BrowserWindow } from "electron";
 import path from "path";
 import store from "@config/store";
 
@@ -27,8 +28,8 @@ export function toggleEnabled(pluginName: string) {
 	store.set(pluginName, !store.get(pluginName));
 }
 
-export function initializePlugins() {
-	const plugins = getAllPlugins().map((plugin) => {
+export function initializePlugins(win: BrowserWindow) {
+	const plugins = getAllPlugins().forEach((plugin) => {
 		console.log(`🚀 => file: utils.ts:39 => plugins => plugin:`, plugin);
 		const configExists = store.has(`plugins.${plugin.label}`);
 		console.log(

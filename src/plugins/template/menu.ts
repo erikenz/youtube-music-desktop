@@ -1,6 +1,6 @@
 import type { BrowserWindow, MenuItemConstructorOptions } from "electron";
 
-import { toggleEnabled } from "@plugins/utils";
+import { toggleEnabled } from "@utils/plugins";
 
 function pluginMenu(win: BrowserWindow): MenuItemConstructorOptions {
 	// Default menu

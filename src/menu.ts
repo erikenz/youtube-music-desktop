@@ -1,7 +1,8 @@
-import type { BrowserWindow, MenuItemConstructorOptions } from "electron";
+import { BrowserWindow, MenuItemConstructorOptions } from "electron";
+import { Menu, dialog } from "electron";
 
-import { Menu } from "electron";
-import { getAllPluginMenu } from "@config/plugins";
+import { getAllPluginMenus } from "@utils/plugins";
+import path from "path";
 
 // true only if in-app-menu was loaded on launch
 // const inAppMenuActive = config.plugins.isEnabled("in-app-menu");
@@ -19,13 +20,45 @@ export function mainMenuTemplate(
 	return [
 		{
 			label: "Plugins",
-			submenu: getAllPluginMenu(),
+			submenu: [
+				{
+					label: "Manage plugins",
+					click: () => {
+						// Open plugins configuration
+					},
+				},
+				{
+					label: "Install plugins",
+					click: () => {
+						// Open plugins store
+						const store = new BrowserWindow({
+							width: 400,
+							height: 400,
+							parent: win,
+						});
+						store.loadFile(
+							path.join(
+								__dirname,
+								"../src/components/store/plugins/app.tsx"
+							)
+						);
+
+						// Install from file
+						// dialog.showOpenDialog(win, { title: "Plugins store" });
+					},
+				},
+				...getAllPluginMenus(win),
+			],
 		},
 		{
 			label: "Themes",
 		},
 		{
 			label: "Options",
+		},
+		{
+			label: "Extra",
+			submenu: [{ label: "Contribute", click: () => {} }],
 		},
 	];
 }
