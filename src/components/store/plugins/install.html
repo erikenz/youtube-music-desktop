@@ -1,13 +1,6 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<script
-			src="https://unpkg.com/react@18/umd/react.development.js"
-			crossorigin></script>
-		<script
-			src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
-			crossorigin></script>
-		<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 		<link rel="stylesheet" href="install.css" />
 		<title>Download New Plugins</title>
 	</head>
@@ -27,6 +20,11 @@
 			</select>
 			<input id="search" type="text" placeholder="Search..." />
 		</header>
+		<!-- TODO: Explain this better (that I could have missed something while reviewing the code or something else) -->
+		<div>
+			Warning: These plugins have been made by the community and could
+			contain bugs or vulnerabilities
+		</div>
 		<div id="plugins-container" class="flex flex-col">
 			<div id="spinner" class="lds-ring">
 				<div></div>
@@ -34,46 +32,6 @@
 				<div></div>
 			</div>
 		</div>
-		<script src="install.js"></script>
 	</body>
+	<script src="install.js"></script>
 </html>
-
-<!-- <script type="text/babel">
-    function Header() {
-        return <header className="bg-red">Header</header>;
-    }
-    function Plugins(props) {
-        console.log(
-            `🚀 => file: install.html:22 => Plugins => props:`,
-            props
-        );
-        return (
-            <div id="plugins-container">
-                <h1>Plugins</h1>
-                {props.children}
-            </div>
-        );
-    }
-    function Spinner() {
-        return (
-            <div className="lds-ring">
-                <div />
-                <div />
-                <div />
-            </div>
-        );
-    }
-    function App() {
-        return (
-            <div>
-                <Header />
-                <Plugins></Plugins>
-                <Spinner />
-            </div>
-        );
-    }
-
-    const container = document.getElementById("root");
-    const root = ReactDOM.createRoot(container);
-    root.render(<App />);
-</script> -->
