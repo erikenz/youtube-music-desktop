@@ -19,46 +19,131 @@ export function mainMenuTemplate(
 	// }
 	return [
 		{
-			label: "Plugins",
+			label: "Settings",
 			submenu: [
 				{
-					label: "Manage plugins",
-					click: () => {
-						// Open plugins configuration
-					},
+					label: "Preferences",
 				},
 				{
-					label: "Install plugins",
-					click: () => {
-						// Open plugins store
-						const store = new BrowserWindow({
-							width: 400,
-							height: 400,
-							parent: win,
-						});
-						store.loadFile(
-							path.join(
-								__dirname,
-								"../src/components/store/plugins/app.tsx"
-							)
-						);
-
-						// Install from file
-						// dialog.showOpenDialog(win, { title: "Plugins store" });
-					},
+					label: "Plugins",
+					submenu: [
+						{
+							label: "Manage plugins",
+							click: () => {
+								// Open plugins configuration
+								const store = new BrowserWindow({
+									width: 400,
+									height: 400,
+									parent: win,
+								});
+								store.loadFile(
+									path.join(
+										__dirname,
+										"../src/components/store/plugins/manage.html"
+									)
+								);
+							},
+						},
+						{
+							label: "Install plugins",
+							click: () => {
+								// Open plugins store
+								const store = new BrowserWindow({
+									// width: 400,
+									// height: 400,
+									parent: win,
+								});
+								store.loadFile(
+									path.join(
+										__dirname,
+										"../src/components/store/plugins/install.html"
+									)
+								);
+								store.webContents.openDevTools();
+								// Install from file
+								// dialog.showOpenDialog(win, { title: "Plugins store" });
+							},
+						},
+						...getAllPluginMenus(win),
+					],
 				},
-				...getAllPluginMenus(win),
+				{
+					label: "Themes",
+					submenu: [
+						{
+							label: "Manage themes",
+							click: () => {
+								// Open plugins configuration
+							},
+						},
+						{
+							label: "Install themes",
+							click: () => {
+								// Open plugins store
+								const store = new BrowserWindow({
+									width: 400,
+									height: 400,
+									parent: win,
+								});
+								store.loadFile(
+									path.join(
+										__dirname,
+										"../src/components/store/themes/index.html"
+									)
+								);
+
+								// Install from file
+								// dialog.showOpenDialog(win, { title: "Plugins store" });
+							},
+						},
+						// ...getAllPluginMenus(win),
+					],
+				},
 			],
 		},
 		{
-			label: "Themes",
-		},
-		{
-			label: "Options",
+			label: "View",
+			submenu: [
+				{
+					label: "Zoom In",
+					role: "zoomIn",
+				},
+				{
+					label: "Zoom Out",
+					role: "zoomOut",
+				},
+			],
 		},
 		{
 			label: "Extra",
 			submenu: [{ label: "Contribute", click: () => {} }],
+		},
+		{
+			label: "Help",
+			submenu: [
+				{
+					label: "About",
+					click: () => {
+						// Open about window
+					},
+				},
+				{
+					label: "Check for updates",
+					click: () => {
+						// Check for updates
+					},
+				},
+				{
+					label: "Report a bug",
+					click: () => {
+						// Open bug report page
+					},
+				},
+				{
+					label: "Toggle developer tools",
+					role: "toggleDevTools",
+				},
+			],
 		},
 	];
 }

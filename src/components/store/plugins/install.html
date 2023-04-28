@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script
+			src="https://unpkg.com/react@18/umd/react.development.js"
+			crossorigin></script>
+		<script
+			src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+			crossorigin></script>
+		<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+		<link rel="stylesheet" href="install.css" />
+		<title>Download New Plugins</title>
+	</head>
+	<body>
+		<header class="flex">
+			<h1>Plugins</h1>
+			<select>
+				<option value="a-z">Sort Alphabetically A-Z</option>
+				<option value="z-a">Sort Alphabetically Z-A</option>
+				<option value="most-recent">Most Recent</option>
+				<option value="most-downloads">Most Downloads</option>
+				<option value="highest-rated">Highest Rated</option>
+			</select>
+			<select>
+				<option value="list">List</option>
+				<option value="grid">Grid</option>
+			</select>
+			<input id="search" type="text" placeholder="Search..." />
+		</header>
+		<div id="plugins-container" class="flex flex-col">
+			<div id="spinner" class="lds-ring">
+				<div></div>
+				<div></div>
+				<div></div>
+			</div>
+		</div>
+		<script src="install.js"></script>
+	</body>
+</html>
+
+<!-- <script type="text/babel">
+    function Header() {
+        return <header className="bg-red">Header</header>;
+    }
+    function Plugins(props) {
+        console.log(
+            `🚀 => file: install.html:22 => Plugins => props:`,
+            props
+        );
+        return (
+            <div id="plugins-container">
+                <h1>Plugins</h1>
+                {props.children}
+            </div>
+        );
+    }
+    function Spinner() {
+        return (
+            <div className="lds-ring">
+                <div />
+                <div />
+                <div />
+            </div>
+        );
+    }
+    function App() {
+        return (
+            <div>
+                <Header />
+                <Plugins></Plugins>
+                <Spinner />
+            </div>
+        );
+    }
+
+    const container = document.getElementById("root");
+    const root = ReactDOM.createRoot(container);
+    root.render(<App />);
+</script> -->
