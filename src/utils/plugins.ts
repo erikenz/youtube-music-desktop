@@ -10,7 +10,7 @@ export function toggleEnabled(pluginName: string) {
 }
 
 export function getAllPlugins() {
-	const pluginsPath = path.join(__dirname, "..", "plugins");
+	const pluginsPath = path.join(__dirname, "../..", "src/plugins");
 	// const pluginsPath = `${app.getPath("userData")}/content.txt`;
 	console.log(
 		`🚀 => file: plugins.ts:13 => getAllPlugins => pluginsPath:`,

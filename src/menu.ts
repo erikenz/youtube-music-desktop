@@ -36,10 +36,11 @@ export function mainMenuTemplate(
 									height: 400,
 									parent: win,
 								});
+								console.log("dirname => ", __dirname);
 								store.loadFile(
 									path.join(
 										__dirname,
-										"../src/components/store/plugins/manage.html"
+										"../../src/components/store/plugins/manage.html"
 									)
 								);
 							},
@@ -56,7 +57,7 @@ export function mainMenuTemplate(
 								store.loadFile(
 									path.join(
 										__dirname,
-										"../src/components/store/plugins/install.html"
+										"../../src/components/store/plugins/install.html"
 									)
 								);
 								store.webContents.openDevTools();
