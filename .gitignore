@@ -1,8 +1,4 @@
-
-
-package-lock.json
-build
-
+.vscode
 # Logs
 logs
 *.log

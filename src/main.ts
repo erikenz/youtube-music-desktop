@@ -1,9 +1,11 @@
 console.log("youtube-music-desktop started");
 
-import { BrowserWindow, app } from "electron";
+import { BrowserWindow, Menu, app, ipcMain } from "electron";
 
+import type { Windows } from "#types/main";
 import defaultConfig from "@config/defaults";
 import { initializePlugins } from "@utils/plugins";
+import { makeWindow } from "@utils/window";
 import path from "path";
 import { setApplicationMenu } from "./menu";
 
@@ -12,73 +14,64 @@ import { setApplicationMenu } from "./menu";
 // whether you're running in development or production).
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
+// Plugin Install Window
+declare const PLUGIN_INSTALL_WINDOW_WEBPACK_ENTRY: string;
+declare const PLUGIN_INSTALL_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require("electron-squirrel-startup")) {
 	app.quit();
 }
 
+let windows: Windows = {
+	main: null,
+	pluginsInstall: null,
+};
+// let mainWindow, pluginInstallWindow;
 const createMainWindow = () => {
-	const mainWindow = new BrowserWindow({
-		width: defaultConfig.windowSize.width,
-		height: defaultConfig.windowSize.height,
-		webPreferences: {
-			nodeIntegration: true,
-			contextIsolation: false,
-			preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
-		},
-		// webPreferences: {
-		// 	// preload: path.join(__dirname, "preload.ts"),
-		// 	preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
-		// },
-		show: false,
-	});
-	// mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
-	mainWindow.loadURL(defaultConfig.url);
-	mainWindow.once("ready-to-show", () => mainWindow.show());
-	initializePlugins(mainWindow);
-	setApplicationMenu(mainWindow);
-
-	// const window1 = new BrowserWindow({
-	// 	width: 800,
-	// 	height: 600,
+	windows.main = makeWindow(
+		MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
+		defaultConfig.url
+		// MAIN_WINDOW_WEBPACK_ENTRY,
+		// { title: "Window 1" }
+	);
+	// const mainWindow = new BrowserWindow({
+	// 	width: defaultConfig.windowSize.width,
+	// 	height: defaultConfig.windowSize.height,
 	// 	webPreferences: {
 	// 		nodeIntegration: true,
 	// 		contextIsolation: false,
 	// 		preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
 	// 	},
+	// 	// webPreferences: {
+	// 	// 	// preload: path.join(__dirname, "preload.ts"),
+	// 	// 	preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
+	// 	// },
+	// 	show: false,
 	// });
-	// const window2 = new BrowserWindow({
-	// 	width: 800,
-	// 	height: 600,
-	// });
-	// console.log(
-	// 	`file:/${path.join(
-	// 		__dirname,
-	// 		"../../src/components/plugins/install/index.html"
-	// 	)}`
-	// );
-	// window1.loadURL(
-	// 	`file:/${path.join(
-	// 		__dirname,
-	// 		"../../src/components/plugins/install/index.html"
-	// 	)}`
-	// );
-	// window2.loadURL(
-	// 	`file://${path.join(
-	// 		__dirname,
-	// 		"../../src/components/plugins/manage/index.html"
-	// 	)}`
-	// );
+	// mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
+	// // mainWindow.loadURL(defaultConfig.url);
+	// mainWindow.once("ready-to-show", () => mainWindow.show());
+	initializePlugins(windows.main);
+	setApplicationMenu(windows);
+	// const menu = Menu.buildFromTemplate([
+	// 	{
+	// 		label: "Plugins",
+	// 		click: () => {
+	// 			pluginInstallWindow = makeWindow(
+	// 				PLUGIN_INSTALL_WINDOW_PRELOAD_WEBPACK_ENTRY,
+	// 				PLUGIN_INSTALL_WINDOW_WEBPACK_ENTRY,
+	// 				{
+	// 					title: "Window 2",
+	// 					width: 600,
+	// 					height: 400,
+	// 				}
+	// 			);
+	// 		},
+	// 	},
+	// ]);
+	// Menu.setApplicationMenu(menu);
 };
-
-// app.whenReady()
-// 	.then(() => {
-// 		globalShortcut.register("Alt+CommandOrControl+Shift+I", () => {
-// 			console.log("Electron loves global shortcuts!");
-// 		});
-// 	})
-// 	.then(createMainWindow);
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -104,3 +97,17 @@ app.on("activate", () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
+
+// ipcMain.on("open_page", (e, page) => {
+// 	pluginInstallWindow = makeWindow(
+// 		PLUGIN_INSTALL_WINDOW_PRELOAD_WEBPACK_ENTRY,
+// 		PLUGIN_INSTALL_WINDOW_WEBPACK_ENTRY,
+// 		{
+// 			title: "Window 2",
+// 			width: 600,
+// 			height: 400,
+// 		}
+// 	);
+// });
+// const handleOpenPage = () => {};
+// ipcMain.handle("openPage", handleOpenPage);
