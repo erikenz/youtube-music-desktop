@@ -12,10 +12,10 @@ export function toggleEnabled(pluginName: string) {
 export function getAllPlugins() {
 	const pluginsPath = path.join(__dirname, "../..", "src/plugins");
 	// const pluginsPath = `${app.getPath("userData")}/content.txt`;
-	console.log(
-		`🚀 => file: plugins.ts:13 => getAllPlugins => pluginsPath:`,
-		pluginsPath
-	);
+	// console.log(
+	// 	`🚀 => file: plugins.ts:13 => getAllPlugins => pluginsPath:`,
+	// 	pluginsPath
+	// );
 	const dir = readdirSync(pluginsPath);
 	const rawPlugins = dir
 		.map((dirName) => path.join(pluginsPath, dirName))
@@ -33,10 +33,10 @@ export function getAllPlugins() {
 			),
 		};
 	});
-	console.log(
-		`🚀 => file: plugins.ts:33 => getAllPlugins => plugins:`,
-		plugins
-	);
+	// console.log(
+	// 	`🚀 => file: plugins.ts:33 => getAllPlugins => plugins:`,
+	// 	plugins
+	// );
 	return plugins;
 }
 export function getAllPluginMenus(
@@ -73,25 +73,25 @@ export function getAllPluginMenus(
 				),
 		};
 	});
-	console.log(
-		`🚀 => file: plugins.ts:63 => menuArray => menuArray:`,
-		menuArray
-	);
+	// console.log(
+	// 	`🚀 => file: plugins.ts:63 => menuArray => menuArray:`,
+	// 	menuArray
+	// );
 	return menuArray;
 	// return [{ label: "test" }];
 }
 
 export function initializePlugins(win: BrowserWindow) {
 	const plugins = getAllPlugins().forEach((plugin) => {
-		console.log(`🚀 => file: utils.ts:39 => plugins => plugin:`, plugin);
+		// console.log(`🚀 => file: utils.ts:39 => plugins => plugin:`, plugin);
 		const configExists = store.has(`plugins.${plugin.label}`);
-		console.log(
-			`🚀 => file: utils.ts:35 => plugins => configExists:`,
-			configExists
-		);
+		// console.log(
+		// 	`🚀 => file: utils.ts:35 => plugins => configExists:`,
+		// 	configExists
+		// );
 		if (!configExists) {
 			store.set(`plugins.${plugin.label}`, true);
 		}
 	});
-	console.log(`🚀 => file: plugins.ts:70 => plugins => plugins:`, plugins);
+	// console.log(`🚀 => file: plugins.ts:70 => plugins => plugins:`, plugins);
 }

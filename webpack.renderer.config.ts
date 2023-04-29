@@ -16,8 +16,32 @@ rules.push({
 				},
 			},
 		},
+		// { loader: "style-loader" },
+		// { loader: "css-loader" },
 	],
 });
+
+// {
+//     test: /\.css$/,
+//     use: [
+//         "style-loader",
+//         "css-loader",
+
+//         {
+//             loader: "postcss-loader",
+//             options: {
+//                 postcssOptions: {
+//                     plugins: [
+//                         require("tailwindcss"),
+//                         require("autoprefixer"),
+//                     ],
+//                 },
+//             },
+//         },
+//         // { loader: "style-loader" },
+//         // { loader: "css-loader" },
+//     ],
+// },
 
 export const rendererConfig: Configuration = {
 	module: {
@@ -45,4 +69,22 @@ export const rendererConfig: Configuration = {
 		// 	{}
 		// ),
 	},
+	// entry: {
+	// 	window1: path.resolve(
+	// 		__dirname,
+	// 		"./src/components/plugins/install/index.html"
+	// 	),
+	// 	window2: path.resolve(
+	// 		__dirname,
+	// 		"./src/components/plugins/manage/index.html"
+	// 	),
+	// },
+	// entry: {
+	// 	window1: [
+	// 		require.resolve("./src/components/plugins/install/index.html"),
+	// 	],
+	// 	window2: [
+	// 		require.resolve("./src/components/plugins/manage/index.html"),
+	// 	],
+	// },
 };

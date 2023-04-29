@@ -1,6 +1,7 @@
 import { BrowserWindow, MenuItemConstructorOptions } from "electron";
 import { Menu, dialog } from "electron";
 
+import { URL } from "url";
 import { getAllPluginMenus } from "@utils/plugins";
 import path from "path";
 
@@ -37,10 +38,10 @@ export function mainMenuTemplate(
 									parent: win,
 								});
 								console.log("dirname => ", __dirname);
-								store.loadFile(
+								store.loadURL(
 									path.join(
 										__dirname,
-										"../../src/components/store/plugins/manage.html"
+										"../../src/components/plugins/manage/index.html"
 									)
 								);
 							},
@@ -53,11 +54,15 @@ export function mainMenuTemplate(
 									// width: 400,
 									// height: 400,
 									parent: win,
+									webPreferences: {
+										nodeIntegration: true,
+										contextIsolation: false,
+									},
 								});
 								store.loadFile(
 									path.join(
 										__dirname,
-										"../../src/components/store/plugins/install.html"
+										"../../src/components/plugins/install/index.html"
 									)
 								);
 								store.webContents.openDevTools();
@@ -75,6 +80,17 @@ export function mainMenuTemplate(
 							label: "Manage themes",
 							click: () => {
 								// Open plugins configuration
+								const store = new BrowserWindow({
+									width: 400,
+									height: 400,
+									parent: win,
+								});
+								store.loadFile(
+									path.join(
+										__dirname,
+										"../src/components/themes/manage/index.html"
+									)
+								);
 							},
 						},
 						{
@@ -89,7 +105,7 @@ export function mainMenuTemplate(
 								store.loadFile(
 									path.join(
 										__dirname,
-										"../src/components/store/themes/index.html"
+										"../src/components/themes/install/index.html"
 									)
 								);
 

@@ -30,6 +30,24 @@ const config: ForgeConfig = {
 							js: "./src/preload.ts",
 						},
 					},
+					// {
+					// 	html: "./src/components/plugins/install/index.html",
+					// 	js: "./src/renderer.ts",
+					// 	name: "plugin_install_window",
+					// },
+					// {
+					// 	html: "./src/components/plugins/manage/index.html",
+					// 	js: "./src/renderer.ts",
+					// 	name: "plugin_manage_window",
+					// },
+					// {
+					// 	html: "./src/components/store/plugins/install.html",
+					// 	js: "./src/components/store/plugins/renderer.ts",
+					// 	name: "plugin_install_window",
+					// 	// preload: {
+					// 	// 	js: "./src/preload.ts",
+					// 	// },
+					// },
 				],
 			},
 		}),
