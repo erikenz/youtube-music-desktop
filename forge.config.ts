@@ -35,7 +35,7 @@ const config: ForgeConfig = {
 						html: "./src/windows/index.html",
 						js: "./src/windows/plugins-install/index.tsx",
 						name: "plugin_install_window",
-                        preload: {
+						preload: {
 							js: "./src/preload.ts",
 						},
 					},
@@ -53,6 +53,10 @@ const config: ForgeConfig = {
 					// 	// },
 					// },
 				],
+			},
+			devServer: {
+				hot: true,
+				liveReload: false,
 			},
 		}),
 	],

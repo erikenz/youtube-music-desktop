@@ -55,16 +55,14 @@ export function mainMenuTemplate(
 						{
 							label: "Install plugins",
 							click: () => {
-								windows.pluginsInstall = makeWindow(
-									PLUGIN_INSTALL_WINDOW_PRELOAD_WEBPACK_ENTRY,
-									PLUGIN_INSTALL_WINDOW_WEBPACK_ENTRY,
-									{
-										title: "Install Plugins",
-										width: 600,
-										height: 400,
-										parent: windows.main,
-									}
-								);
+								windows.pluginsInstall = makeWindow({
+									URL: PLUGIN_INSTALL_WINDOW_WEBPACK_ENTRY,
+									title: "Install Plugins",
+									// width: 600,
+									// height: 400,
+									parent: windows.main,
+								});
+								windows.pluginsInstall.webContents.openDevTools();
 								// window.electronAPI.openPage("plugin_install_window");
 								// ipcRenderer.send(
 								// 	"open_page",

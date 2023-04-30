@@ -1,15 +1,11 @@
 {
 	"name": "youtube-music-desktop",
 	"productName": "YouTube Music",
-	"version": "1.0.0",
+	"version": "2.0.0",
 	"description": "YouTube Music Desktop App",
 	"main": ".webpack/main",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"build": "tsc && tsc-alias",
-		"start-old": "npm run build && electron ./build/main.js",
-		"dev": "concurrently \"tsc -w\" \"tsc-alias\" \"electron ./build/main.js\"",
-		"tsc": "concurrently \"tsc -w\" \"tsc-alias\" \"electron-forge start\"",
 		"start": "electron-forge start",
 		"package": "electron-forge package",
 		"make": "electron-forge make",
@@ -54,13 +50,16 @@
 		"tailwindcss": "^3.3.2",
 		"ts-loader": "^9.4.2",
 		"ts-node": "^10.9.1",
-		"tsc-alias": "^1.8.5",
 		"typescript": "^5.0.4"
 	},
 	"dependencies": {
+		"classnames": "^2.3.2",
+		"electron-dl": "^3.5.0",
+		"electron-fetch": "^1.9.1",
 		"electron-squirrel-startup": "^1.0.0",
 		"electron-store": "^8.1.0",
 		"react": "^18.2.0",
-		"react-dom": "^18.2.0"
+		"react-dom": "^18.2.0",
+		"url": "^0.11.0"
 	}
 }

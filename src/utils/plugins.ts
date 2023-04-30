@@ -11,11 +11,6 @@ export function toggleEnabled(pluginName: string) {
 
 export function getAllPlugins() {
 	const pluginsPath = path.join(__dirname, "../..", "src/plugins");
-	// const pluginsPath = `${app.getPath("userData")}/content.txt`;
-	// console.log(
-	// 	`🚀 => file: plugins.ts:13 => getAllPlugins => pluginsPath:`,
-	// 	pluginsPath
-	// );
 	const dir = readdirSync(pluginsPath);
 	const rawPlugins = dir
 		.map((dirName) => path.join(pluginsPath, dirName))
@@ -33,10 +28,6 @@ export function getAllPlugins() {
 			),
 		};
 	});
-	// console.log(
-	// 	`🚀 => file: plugins.ts:33 => getAllPlugins => plugins:`,
-	// 	plugins
-	// );
 	return plugins;
 }
 export function getAllPluginMenus(
@@ -48,19 +39,7 @@ export function getAllPluginMenus(
 			const menuPath = path.join(plugin.dir, "menu.js");
 			const getPluginMenu = require(menuPath);
 			const menu = getPluginMenu.default(win);
-			// console.log(
-			// 	`🚀 => file: plugins.ts:48 => menuArray => menu:`,
-			// 	menu
-			// );
 			return menu;
-
-			// const getMenu = async (): Promise<MenuItemConstructorOptions> => {
-			// 	const getPluginMenu = await import(menuPath);
-			// 	const menu = getPluginMenu.default();
-			// 	return menu;
-			// };
-			// return getMenu();
-			return { label: "test" };
 		}
 		return {
 			label: plugin.label,
@@ -73,25 +52,14 @@ export function getAllPluginMenus(
 				),
 		};
 	});
-	// console.log(
-	// 	`🚀 => file: plugins.ts:63 => menuArray => menuArray:`,
-	// 	menuArray
-	// );
 	return menuArray;
-	// return [{ label: "test" }];
 }
 
 export function initializePlugins(win: BrowserWindow) {
 	const plugins = getAllPlugins().forEach((plugin) => {
-		// console.log(`🚀 => file: utils.ts:39 => plugins => plugin:`, plugin);
 		const configExists = store.has(`plugins.${plugin.label}`);
-		// console.log(
-		// 	`🚀 => file: utils.ts:35 => plugins => configExists:`,
-		// 	configExists
-		// );
 		if (!configExists) {
 			store.set(`plugins.${plugin.label}`, true);
 		}
 	});
-	// console.log(`🚀 => file: plugins.ts:70 => plugins => plugins:`, plugins);
 }

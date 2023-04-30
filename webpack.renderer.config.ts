@@ -58,6 +58,17 @@ export const rendererConfig: Configuration = {
 			"@themes": path.resolve(__dirname, "./src/themes"),
 			"#types": path.resolve(__dirname, "./src/types"),
 		},
+		// fallback: {
+		// 	fs: false,
+		// 	tls: false,
+		// 	net: false,
+		// 	path: false,
+		// 	zlib: false,
+		// 	http: false,
+		// 	https: false,
+		// 	stream: false,
+		// 	crypto: false,
+		// },
 		// alias: Object.keys(tsconfig.compilerOptions.paths).reduce(
 		// 	(aliases, aliasName) => {
 		// 		aliases[aliasName] = path.resolve(

@@ -1,11 +1,8 @@
 import { BrowserWindow, BrowserWindowConstructorOptions, app } from "electron";
 
-import type { WebPreferences } from "electron";
-export const makeWindow = (
-	PRELOAD: WebPreferences["preload"],
-	URL: string,
-	more?: BrowserWindowConstructorOptions
-) => {
+import type { WindowProps } from "#types/main";
+
+export const makeWindow = ({ PRELOAD, URL, ...props }: WindowProps) => {
 	// Create the browser window.
 	const win = new BrowserWindow({
 		show: false,
@@ -13,22 +10,22 @@ export const makeWindow = (
 		maximizable: true,
 		transparent: false,
 		autoHideMenuBar: true,
-		backgroundColor: "black",
+		backgroundColor: "#23272E",
 		webPreferences: {
 			preload: PRELOAD,
 			nodeIntegration: true,
 			contextIsolation: false,
-			webSecurity: false,
+			webSecurity: true,
 			// enableRemoteModule: true,
 			devTools: !app.isPackaged,
 		},
-		...more,
+		...props,
 	});
 
 	win.loadURL(URL);
 	win.on("ready-to-show", function () {
 		win.show();
-		win.focus();
+		// win.focus();
 	});
 
 	return win;

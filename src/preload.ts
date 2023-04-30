@@ -5,6 +5,8 @@ import { contextBridge, ipcRenderer } from "electron";
 contextBridge.exposeInMainWorld("electronAPI", {
 	loadPreferences: () => ipcRenderer.invoke("load-prefs"),
 	openPage: (page: string) => ipcRenderer.send("open_page", page),
+	greet: (message: string) => ipcRenderer.send("greet", message),
+	fetchPlugins: () => ipcRenderer.sendSync("fetch-plugins"),
 });
 
 window.addEventListener("DOMContentLoaded", () => {
