@@ -1,5 +1,4 @@
 import type { ModuleOptions } from "webpack";
-import path from "path";
 
 export const rules: Required<ModuleOptions>["rules"] = [
 	// Add support for native node modules
@@ -29,25 +28,4 @@ export const rules: Required<ModuleOptions>["rules"] = [
 			},
 		},
 	},
-	//{
-	//     test: /\.css$/,
-	//     use: [
-	//         "style-loader",
-	//         "css-loader",
-
-	//         {
-	//             loader: "postcss-loader",
-	//             options: {
-	//                 postcssOptions: {
-	//                     plugins: [
-	//                         require("tailwindcss"),
-	//                         require("autoprefixer"),
-	//                     ],
-	//                 },
-	//             },
-	//         },
-	//         // { loader: "style-loader" },
-	//         // { loader: "css-loader" },
-	//     ],
-	// },
 ];

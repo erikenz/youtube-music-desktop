@@ -1,9 +1,9 @@
 import type { BrowserWindow, MenuItemConstructorOptions } from "electron";
-import { existsSync, lstatSync, readdirSync } from "fs";
+import { lstatSync, readdirSync } from "fs";
 
-import { app } from "electron";
 import path from "path";
-import store from "../config/store";
+// import store from "../config/store";
+import { store } from "@config/store";
 
 export function toggleEnabled(pluginName: string) {
 	store.set(pluginName, !store.get(pluginName));
@@ -56,7 +56,11 @@ export function getAllPluginMenus(
 }
 
 export function initializePlugins(win: BrowserWindow) {
-	const plugins = getAllPlugins().forEach((plugin) => {
+	const plugins = getAllPlugins();
+	if (!store.has("plugins")) {
+		store.set("plugins", {});
+	}
+	plugins.forEach((plugin) => {
 		const configExists = store.has(`plugins.${plugin.label}`);
 		if (!configExists) {
 			store.set(`plugins.${plugin.label}`, true);
