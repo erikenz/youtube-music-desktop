@@ -3,7 +3,7 @@ import Store, { Schema } from "electron-store";
 import type { MainSchema } from "#types/config";
 
 export const configSchema: Schema<MainSchema> = {
-	window: {
+	windowPos: {
 		type: "object",
 		properties: {
 			pos: {
@@ -17,30 +17,31 @@ export const configSchema: Schema<MainSchema> = {
 					},
 				},
 			},
+		},
+	},
+	windowSize: {
+		type: "object",
+		properties: {
 			size: {
 				type: "object",
 				properties: {
 					width: {
-						type: "number" || "null",
+						type: "number",
 					},
 					height: {
-						type: "number" || "null",
+						type: "number",
 					},
 				},
 			},
-			maximized: {
-				type: "boolean",
-				default: false,
-			},
-			alwaysOnTop: {
-				type: "boolean",
-				default: false,
-			},
 		},
-		default: {
-			maximized: false,
-			alwaysOnTop: false,
-		},
+	},
+	windowMaximized: {
+		type: "boolean",
+		default: false,
+	},
+	windowAlwaysOnTop: {
+		type: "boolean",
+		default: false,
 	},
 	url: {
 		type: "string",

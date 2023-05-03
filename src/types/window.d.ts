@@ -18,17 +18,6 @@ export interface WindowProps extends BrowserWindowConstructorOptions {
 	URL: string;
 }
 
-export interface CustomWindowConstructorProps {
-	urlToLoad: string;
-	windowProps?: BrowserWindowConstructorOptions;
-	position?: { x: number; y: number };
-	size?: { width: number; height: number };
-	preloadPath?: string;
-}
-export interface CustomWindowProps {
-	window: BrowserWindow;
-}
-
 export interface CreateWindowProps {
 	urlToLoad: string;
 	preloadPath?: string;
@@ -39,43 +28,65 @@ export interface CreateWindowProps {
 	onPageTitleUpdated?: (
 		event: Event,
 		title: string,
-		explicitSet: boolean
+		explicitSet: boolean,
+		win?: BrowserWindow
 	) => void;
-	onClose?: (event: Event) => void;
-	onClosed?: () => void;
-	onSessionEnd?: () => void;
-	onUnresponsive?: () => void;
-	onResponsive?: () => void;
-	onBlur?: () => void;
-	onFocus?: () => void;
-	onShow?: () => void;
-	onHide?: () => void;
-	onReadyToShow?: () => void;
-	onMaximize?: () => void;
-	onUnmaximize?: () => void;
-	onMinimize?: () => void;
-	onRestore?: () => void;
+	onClose?: (event: Event, win?: BrowserWindow) => void;
+	onClosed?: (win?: BrowserWindow) => void;
+	onSessionEnd?: (win?: BrowserWindow) => void;
+	onUnresponsive?: (win?: BrowserWindow) => void;
+	onResponsive?: (win?: BrowserWindow) => void;
+	onBlur?: (win?: BrowserWindow) => void;
+	onFocus?: (win?: BrowserWindow) => void;
+	onShow?: (win?: BrowserWindow) => void;
+	onHide?: (win?: BrowserWindow) => void;
+	onReadyToShow?: (win?: BrowserWindow) => void;
+	onMaximize?: (win?: BrowserWindow) => void;
+	onUnmaximize?: (win?: BrowserWindow) => void;
+	onMinimize?: (win?: BrowserWindow) => void;
+	onRestore?: (win?: BrowserWindow) => void;
 	onWillResize?: (
 		event: Event,
 		newBounds: Rectangle,
-		details: WillResizeDetails
+		details: WillResizeDetails,
+		win?: BrowserWindow
 	) => void;
-	onResize?: () => void;
-	onResized?: () => void;
-	onWillMove?: (event: Event, newBounds: Rectangle) => void;
-	onMove?: () => void;
-	onMoved?: () => void;
-	onEnterFullScreen?: () => void;
-	onLeaveFullScreen?: () => void;
-	onEnterHtmlFullScreen?: () => void;
-	onLeaveHtmlFullScreen?: () => void;
-	onAlwaysOnTopChanged?: (event: Event, isAlwaysOnTop: boolean) => void;
-	onAppCommand?: (event: Event, command: string) => void;
-	onSwipe?: (event: Event, direction: string) => void;
-	onRotateGesture?: (event: Event, rotation: number) => void;
-	onSheetBegin?: () => void;
-	onSheetEnd?: () => void;
-	onNewWindowForTab?: () => void;
-	onSystemContextMenu?: (event: Event, point: Point) => void;
-	onIsAlwaysOnTop?: (event: Event, isAlwaysOnTop: boolean) => void;
+	onResize?: (win?: BrowserWindow) => void;
+	onResized?: (win?: BrowserWindow) => void;
+	onWillMove?: (
+		event: Event,
+		newBounds: Rectangle,
+		win?: BrowserWindow
+	) => void;
+	onMove?: (win?: BrowserWindow) => void;
+	onMoved?: (win?: BrowserWindow) => void;
+	onEnterFullScreen?: (win?: BrowserWindow) => void;
+	onLeaveFullScreen?: (win?: BrowserWindow) => void;
+	onEnterHtmlFullScreen?: (win?: BrowserWindow) => void;
+	onLeaveHtmlFullScreen?: (win?: BrowserWindow) => void;
+	onAlwaysOnTopChanged?: (
+		event: Event,
+		isAlwaysOnTop: boolean,
+		win?: BrowserWindow
+	) => void;
+	onAppCommand?: (event: Event, command: string, win?: BrowserWindow) => void;
+	onSwipe?: (event: Event, direction: string, win?: BrowserWindow) => void;
+	onRotateGesture?: (
+		event: Event,
+		rotation: number,
+		win?: BrowserWindow
+	) => void;
+	onSheetBegin?: (win?: BrowserWindow) => void;
+	onSheetEnd?: (win?: BrowserWindow) => void;
+	onNewWindowForTab?: (win?: BrowserWindow) => void;
+	onSystemContextMenu?: (
+		event: Event,
+		point: Point,
+		win?: BrowserWindow
+	) => void;
+	onIsAlwaysOnTop?: (
+		event: Event,
+		isAlwaysOnTop: boolean,
+		win?: BrowserWindow
+	) => void;
 }

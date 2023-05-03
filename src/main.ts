@@ -47,7 +47,6 @@ const createMainWindow = () => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on("ready", () => {
-	// createMainWindow();
 	const urlToLoad = store.get("options.resumeOnStart")
 		? store.get("url")
 		: defaultConfig.url;
@@ -56,28 +55,62 @@ app.on("ready", () => {
 	windows.main = createWindow({
 		urlToLoad: urlToLoad,
 		preloadPath: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
-		onReadyToShow: function (this: BrowserWindow) {
-			console.log(this);
-			// const [xPos, yPos] = windows.main.getPosition();
-			// store.set({ window: { pos: { x: xPos, y: yPos } } });
-			// const [width, height] = windows.main.getSize();
-			// store.set({
-			// 	window: { size: { width: width, height: height } },
-			// });
-			// console.log(
-			// 	`initialized window at pos [${store.get(
-			// 		"window.pos"
-			// 	)}] and size [${store.get("window.size")}]`
-			// );
+		onReadyToShow: (win) => {
+			//? Set window last config or default config
+			const hasPos = store.has("windowPos");
+			const hasSize = store.has("windowSize");
+			if (hasPos && hasSize) {
+				//? Check if window is offscreen
+				const pos: WindowPos = store.get("windowPos");
+				const size: WindowSize = store.get("windowSize");
+				const displaySize = screen.getDisplayNearestPoint({
+					x: pos.x,
+					y: pos.y,
+				}).bounds;
+				if (
+					pos.x + size.width < displaySize.x - 8 ||
+					pos.x - size.width > displaySize.x + displaySize.width ||
+					pos.y < displaySize.y - 8 ||
+					pos.y > displaySize.y + displaySize.height
+				) {
+					//Window is offscreen
+					if (is.dev()) {
+						console.error(
+							`Window tried to render offscreen, windowSize=${size}, displaySize=${displaySize}, position=${pos}`
+						);
+					}
+				} else {
+					windows.main.setPosition(pos.x, pos.y);
+					windows.main.setSize(size.width, size.height);
+					console.log(
+						`main.ts => line:86 => window spawned at position: [${pos.x} | ${pos.y}] and size: [${size.width} | ${size.height}]`
+					);
+				}
+			} else {
+				const [xPos, yPos] = win.getPosition();
+				store.set({ windowPos: { x: xPos, y: yPos } });
+				const [width, height] = win.getSize();
+				store.set({
+					windowSize: {
+						width: width,
+						height: height,
+					},
+				});
+			}
+			if (store.get("windowMaximized")) {
+				windows.main.maximize();
+			}
+			if (store.get("windowAlwaysOnTop")) {
+				windows.main.setAlwaysOnTop(true);
+			}
 		},
-		onMove: () => {
+		onMove: (win) => {
 			clearTimeout(moveTimer);
 			moveTimer = setTimeout(() => {
-				const [xPos, yPos] = windows.main.getPosition();
+				const [xPos, yPos] = win.getPosition();
 				if (xPos && yPos) {
 					try {
-						store.set({ window: { pos: { x: xPos, y: yPos } } });
-						// store.set({ "window.pos.x": xPos, "window.pos.y": yPos });
+						store.set({ windowPos: { x: xPos, y: yPos } });
 						console.log(`saved window coords [${xPos} | ${yPos}]`);
 					} catch (error) {
 						console.error(error);
@@ -85,19 +118,15 @@ app.on("ready", () => {
 				}
 			}, 5000);
 		},
-		onResize: () => {
+		onResize: (win) => {
 			clearTimeout(resizeTimer);
 			resizeTimer = setTimeout(() => {
-				const [width, height] = windows.main.getSize();
+				const [width, height] = win.getSize();
 				if (width && height) {
 					try {
 						store.set({
-							window: { size: { width: width, height: height } },
+							windowSize: { width: width, height: height },
 						});
-						// store.set({
-						// 	"window.size.width": width,
-						// 	"window.size.height": height,
-						// });
 						console.log(`saved window size [${width} | ${height}]`);
 					} catch (error) {
 						console.error(error);
@@ -108,50 +137,6 @@ app.on("ready", () => {
 	});
 	initializePlugins(windows.main);
 	setApplicationMenu(windows);
-
-	//? Set window last config or default config
-
-	try {
-		const hasPos = store.has("window.pos");
-		const hasSize = store.has("window.size");
-		if (hasPos && hasSize) {
-			//? Check if window is offscreen
-			const pos: WindowPos = store.get("window.pos");
-			const size: WindowSize = store.get("window.size");
-			const displaySize = screen.getDisplayNearestPoint({
-				x: pos.x,
-				y: pos.y,
-			}).bounds;
-			if (
-				pos.x + size.width < displaySize.x - 8 ||
-				pos.x - size.width > displaySize.x + displaySize.width ||
-				pos.y < displaySize.y - 8 ||
-				pos.y > displaySize.y + displaySize.height
-			) {
-				//Window is offscreen
-				if (is.dev()) {
-					console.error(
-						`Window tried to render offscreen, windowSize=${size}, displaySize=${displaySize}, position=${pos}`
-					);
-				}
-			} else {
-				windows.main.setPosition(pos.x, pos.y);
-				windows.main.setSize(size.width, size.height);
-				console.log(
-					`window spawned at position: [${pos.x} | ${pos.y}] and size: [${size.width} | ${size.height}]`
-				);
-			}
-		}
-
-		if (store.get("window.maximized")) {
-			windows.main.maximize();
-		}
-		if (store.get("window.alwaysOnTop")) {
-			windows.main.setAlwaysOnTop(true);
-		}
-	} catch (error) {
-		console.error(error);
-	}
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common

@@ -1,8 +1,4 @@
-import type {
-	CreateWindowProps,
-	CustomWindowConstructorProps,
-} from "#types/window";
-import type { CustomWindowProps, WindowProps } from "#types/window";
+import type { CreateWindowProps, WindowProps } from "#types/window";
 
 import { BrowserWindow } from "electron";
 
@@ -97,172 +93,205 @@ export function createWindow({
 		// this.window = window;
 		window.loadURL(urlToLoad);
 
-		window.on("page-title-updated", (event, title, explicitSet) => {
+		window.on("page-title-updated", function (event, title, explicitSet) {
 			if (onPageTitleUpdated) {
-				onPageTitleUpdated(event, title, explicitSet);
+				const win = this;
+				onPageTitleUpdated(event, title, explicitSet, win);
 			}
 		});
-		window.on("close", (event) => {
+		window.on("close", function (event) {
 			if (onClose) {
-				onClose(event);
+				const win = this;
+				onClose(event, win);
 			}
 		});
-		window.on("closed", () => {
+		window.on("closed", function () {
 			if (onClosed) {
-				onClosed();
+				const win = this;
+				onClosed(win);
 			}
 		});
-		window.on("session-end", () => {
+		window.on("session-end", function () {
 			if (onSessionEnd) {
-				onSessionEnd();
+				const win = this;
+				onSessionEnd(win);
 			}
 		});
-		window.on("unresponsive", () => {
+		window.on("unresponsive", function () {
 			if (onUnresponsive) {
-				onUnresponsive();
+				const win = this;
+				onUnresponsive(win);
 			}
 		});
-		window.on("responsive", () => {
+		window.on("responsive", function () {
 			if (onResponsive) {
-				onResponsive();
+				const win = this;
+				onResponsive(win);
 			}
 		});
-		window.on("blur", () => {
+		window.on("blur", function () {
 			if (onBlur) {
-				onBlur();
+				const win = this;
+				onBlur(win);
 			}
 		});
-		window.on("focus", () => {
+		window.on("focus", function () {
 			if (onFocus) {
-				onFocus();
+				const win = this;
+				onFocus(win);
 			}
 		});
-		window.on("show", () => {
+		window.on("show", function () {
 			if (onShow) {
-				onShow();
+				const win = this;
+				onShow(win);
 			}
 		});
-		window.on("hide", () => {
+		window.on("hide", function () {
 			if (onHide) {
-				onHide();
+				const win = this;
+				onHide(win);
 			}
 		});
-		window.on("ready-to-show", () => {
+		window.on("ready-to-show", function () {
 			window.show();
 			//! Disabled in testing because of hot reload
 			// win.focus();
 			if (onReadyToShow) {
-				onReadyToShow();
+				const win = this;
+				onReadyToShow(win);
 			}
 		});
-		window.on("maximize", () => {
+		window.on("maximize", function () {
 			if (onMaximize) {
-				onMaximize();
+				const win = this;
+				onMaximize(win);
 			}
 		});
-		window.on("unmaximize", () => {
+		window.on("unmaximize", function () {
 			if (onUnmaximize) {
-				onUnmaximize();
+				const win = this;
+				onUnmaximize(win);
 			}
 		});
-		window.on("minimize", () => {
+		window.on("minimize", function () {
 			if (onMinimize) {
-				onMinimize();
+				const win = this;
+				onMinimize(win);
 			}
 		});
-		window.on("restore", () => {
+		window.on("restore", function () {
 			if (onRestore) {
-				onRestore();
+				const win = this;
+				onRestore(win);
 			}
 		});
-		window.on("will-resize", (event, newBounds, details) => {
+		window.on("will-resize", function (event, newBounds, details) {
 			if (onWillResize) {
-				onWillResize(event, newBounds, details);
+				const win = this;
+				onWillResize(event, newBounds, details, win);
 			}
 		});
-		window.on("resize", () => {
+		window.on("resize", function () {
 			if (onResize) {
-				onResize();
+				const win = this;
+				onResize(win);
 			}
 		});
-		window.on("resized", () => {
+		window.on("resized", function () {
 			if (onResized) {
-				onResized();
+				const win = this;
+				onResized(win);
 			}
 		});
-		window.on("will-move", (event, newBounds) => {
+		window.on("will-move", function (event, newBounds) {
 			if (onWillMove) {
-				onWillMove(event, newBounds);
+				const win = this;
+				onWillMove(event, newBounds, win);
 			}
 		});
-		window.on("move", () => {
+		window.on("move", function () {
 			if (onMove) {
-				onMove();
+				const win = this;
+				onMove(win);
 			}
 		});
-		window.on("moved", () => {
+		window.on("moved", function () {
 			if (onMoved) {
-				onMoved();
+				const win = this;
+				onMoved(win);
 			}
 		});
-		window.on("enter-full-screen", () => {
+		window.on("enter-full-screen", function () {
 			if (onEnterFullScreen) {
-				onEnterFullScreen();
+				const win = this;
+				onEnterFullScreen(win);
 			}
 		});
-		window.on("leave-full-screen", () => {
+		window.on("leave-full-screen", function () {
 			if (onLeaveFullScreen) {
-				onLeaveFullScreen();
+				const win = this;
+				onLeaveFullScreen(win);
 			}
 		});
-		window.on("enter-html-full-screen", () => {
+		window.on("enter-html-full-screen", function () {
 			if (onEnterHtmlFullScreen) {
-				onEnterHtmlFullScreen();
+				const win = this;
+				onEnterHtmlFullScreen(win);
 			}
 		});
-		window.on("leave-html-full-screen", () => {
+		window.on("leave-html-full-screen", function () {
 			if (onLeaveHtmlFullScreen) {
-				onLeaveHtmlFullScreen();
+				const win = this;
+				onLeaveHtmlFullScreen(win);
 			}
 		});
-		window.on("always-on-top-changed", (event, isAlwaysOnTop) => {
+		window.on("always-on-top-changed", function (event, isAlwaysOnTop) {
 			if (onAlwaysOnTopChanged) {
-				onAlwaysOnTopChanged(event, isAlwaysOnTop);
+				const win = this;
+				onAlwaysOnTopChanged(event, isAlwaysOnTop, win);
 			}
 		});
-		window.on("app-command", (event, command) => {
+		window.on("app-command", function (event, command) {
 			if (onAppCommand) {
-				onAppCommand(event, command);
+				const win = this;
+				onAppCommand(event, command, win);
 			}
 		});
-		window.on("swipe", (event, direction) => {
+		window.on("swipe", function (event, direction) {
 			if (onSwipe) {
-				onSwipe(event, direction);
+				const win = this;
+				onSwipe(event, direction, win);
 			}
 		});
-		window.on("rotate-gesture", (event, rotation) => {
+		window.on("rotate-gesture", function (event, rotation) {
 			if (onRotateGesture) {
-				onRotateGesture(event, rotation);
+				const win = this;
+				onRotateGesture(event, rotation, win);
 			}
 		});
-		window.on("sheet-begin", () => {
+		window.on("sheet-begin", function () {
 			if (onSheetBegin) {
-				onSheetBegin();
+				const win = this;
+				onSheetBegin(win);
 			}
 		});
-		window.on("sheet-end", () => {
+		window.on("sheet-end", function () {
 			if (onSheetEnd) {
-				onSheetEnd();
+				const win = this;
+				onSheetEnd(win);
 			}
 		});
-		window.on("new-window-for-tab", () => {
+		window.on("new-window-for-tab", function () {
 			if (onNewWindowForTab) {
-				onNewWindowForTab();
+				const win = this;
+				onNewWindowForTab(win);
 			}
 		});
-		window.on("system-context-menu", (event, point) => {
+		window.on("system-context-menu", function (event, point) {
 			if (onSystemContextMenu) {
-				onSystemContextMenu(event, point);
+				const win = this;
+				onSystemContextMenu(event, point, win);
 			}
 		});
 
@@ -271,16 +300,6 @@ export function createWindow({
 		console.error(error);
 	}
 }
-
-// testing createWindow() as a class
-export class CustomWindow implements CustomWindowProps {
-	window: BrowserWindow;
-	constructor({ windowProps }: CustomWindowConstructorProps) {
-		this.window = new BrowserWindow(windowProps);
-	}
-	// this.window.on("")
-}
-new CustomWindow({ urlToLoad: "" });
 
 // function showUnresponsiveDialog(win, details) {
 // 	if (!!details) {

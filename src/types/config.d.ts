@@ -8,10 +8,6 @@ export interface WindowSize {
 	width?: number;
 	height?: number;
 }
-export interface WindowConfig {
-	pos?: WindowPos;
-	size?: WindowSize;
-}
 export interface AppConfig {
 	autoUpdates: boolean;
 	resumeOnStart: boolean;
@@ -19,7 +15,10 @@ export interface AppConfig {
 	startAtLogin: boolean;
 }
 export interface MainSchema {
-	window: WindowConfig;
+	windowSize: WindowSize;
+	windowPos: WindowPos;
+	windowMaximized: boolean;
+	windowAlwaysOnTop: boolean;
 	url: string;
 	lang: Lang;
 	options: AppConfig;
