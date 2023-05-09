@@ -1,8 +1,10 @@
 {
 	"compilerOptions": {
-		"target": "ES6",
+		// "target": "ES6",
+		"target": "ESNext",
 		"allowJs": true,
-		"module": "CommonJS",
+		"module": "ESNext",
+		// "module": "CommonJS",
 		"skipLibCheck": true,
 		"esModuleInterop": true,
 		"noImplicitAny": true,
@@ -25,11 +27,17 @@
 			"@config/*": ["src/config/*"],
 			"@utils/*": ["src/utils/*"],
 			"@components/*": ["src/components/*"],
+			"@windows/*": ["src/windows/*"],
 			"#types/*": ["src/types/*"]
 		},
 		"jsx": "react-jsx",
-		"lib": ["dom", "dom.iterable", "ESNext"],
+		"lib": ["DOM", "dom.iterable", "ESNext"],
 		"typeRoots": ["./src/types"]
 	},
-	"include": ["src/**/*"]
+	"include": ["src/**/*"],
+	"ts-node": {
+		"compilerOptions": {
+			"module": "CommonJS"
+		}
+	}
 }

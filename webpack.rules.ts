@@ -28,4 +28,17 @@ export const rules: Required<ModuleOptions>["rules"] = [
 			},
 		},
 	},
+	{
+		test: /\.mts?$/,
+		exclude: /(node_modules|\.webpack)/,
+		use: {
+			loader: "ts-loader",
+		},
+	},
+	// {
+	// 	test: /\.config\.ts$/,
+	// 	exclude: /node_modules/,
+	// 	loader: "file-loader",
+	// 	options: { name: "./conf/[name]-[hash:base36:4].[ext]" },
+	// },
 ];

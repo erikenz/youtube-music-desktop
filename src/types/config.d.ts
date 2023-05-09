@@ -14,6 +14,12 @@ export interface AppConfig {
 	disableHardwareAcceleration: boolean;
 	startAtLogin: boolean;
 }
+export interface PluginConfig {
+	[key: string]: {
+		enabled: boolean;
+		config: object;
+	};
+}
 export interface MainSchema {
 	windowSize: WindowSize;
 	windowPos: WindowPos;
@@ -23,4 +29,8 @@ export interface MainSchema {
 	lang: Lang;
 	options: AppConfig;
 	plugins: object;
+	themes: object;
+}
+export interface NewSchema {
+	[key: string]: {};
 }

@@ -1,16 +1,14 @@
-import { BrowserWindow, app, ipcMain, screen } from "electron";
-import { WindowPos, WindowSize } from "#types/config";
-import { createWindow, makeWindow } from "@utils/window";
+import { BrowserWindow, app, ipcMain } from "electron";
+import { createStore, store } from "@config/store";
+import { getAllPlugins, loadPlugins } from "@utils/plugins";
 
-import { PluginGitHub } from "#types/plugin";
+import type { PluginConfig } from "#types/config";
+import type { PluginGitHub } from "#types/plugin";
 import type { Windows } from "#types/window";
-import defaultConfig from "@config/defaults";
+import { createMainWindow } from "@windows/main";
 import { download } from "electron-dl";
-import { initializePlugins } from "@utils/plugins";
-import is from "electron-is";
 import path from "path";
-import { setApplicationMenu } from "./menu";
-import { store } from "@config/store";
+import { setAppMenu } from "@utils/menu";
 
 console.log("youtube-music-desktop started");
 
@@ -18,7 +16,7 @@ console.log("youtube-music-desktop started");
 // plugin that tells the Electron app where to look for the Webpack-bundled app code (depending on
 // whether you're running in development or production).
 // declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
-declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
+// declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
 // Plugin Install Window
 // declare const PLUGIN_INSTALL_WINDOW_WEBPACK_ENTRY: string;
 // declare const PLUGIN_INSTALL_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
@@ -31,112 +29,19 @@ if (require("electron-squirrel-startup")) {
 let windows: Windows = {
 	main: null,
 	pluginsInstall: null,
-};
-
-const createMainWindow = () => {
-	const urlToLoad = store.get("options.resumeOnStart")
-		? store.get("url")
-		: defaultConfig.url;
-	windows.main = makeWindow({
-		PRELOAD: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
-		URL: urlToLoad,
-	});
+	pluginsManage: null,
+	themesInstall: null,
+	themesManage: null,
 };
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on("ready", () => {
-	const urlToLoad = store.get("options.resumeOnStart")
-		? store.get("url")
-		: defaultConfig.url;
-	let moveTimer: ReturnType<typeof setTimeout>;
-	let resizeTimer: ReturnType<typeof setTimeout>;
-	windows.main = createWindow({
-		urlToLoad: urlToLoad,
-		preloadPath: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
-		onReadyToShow: (win) => {
-			//? Set window last config or default config
-			const hasPos = store.has("windowPos");
-			const hasSize = store.has("windowSize");
-			if (hasPos && hasSize) {
-				//? Check if window is offscreen
-				const pos: WindowPos = store.get("windowPos");
-				const size: WindowSize = store.get("windowSize");
-				const displaySize = screen.getDisplayNearestPoint({
-					x: pos.x,
-					y: pos.y,
-				}).bounds;
-				if (
-					pos.x + size.width < displaySize.x - 8 ||
-					pos.x - size.width > displaySize.x + displaySize.width ||
-					pos.y < displaySize.y - 8 ||
-					pos.y > displaySize.y + displaySize.height
-				) {
-					//Window is offscreen
-					if (is.dev()) {
-						console.error(
-							`Window tried to render offscreen, windowSize=${size}, displaySize=${displaySize}, position=${pos}`
-						);
-					}
-				} else {
-					windows.main.setPosition(pos.x, pos.y);
-					windows.main.setSize(size.width, size.height);
-					console.log(
-						`main.ts => line:86 => window spawned at position: [${pos.x} | ${pos.y}] and size: [${size.width} | ${size.height}]`
-					);
-				}
-			} else {
-				const [xPos, yPos] = win.getPosition();
-				store.set({ windowPos: { x: xPos, y: yPos } });
-				const [width, height] = win.getSize();
-				store.set({
-					windowSize: {
-						width: width,
-						height: height,
-					},
-				});
-			}
-			if (store.get("windowMaximized")) {
-				windows.main.maximize();
-			}
-			if (store.get("windowAlwaysOnTop")) {
-				windows.main.setAlwaysOnTop(true);
-			}
-		},
-		onMove: (win) => {
-			clearTimeout(moveTimer);
-			moveTimer = setTimeout(() => {
-				const [xPos, yPos] = win.getPosition();
-				if (xPos && yPos) {
-					try {
-						store.set({ windowPos: { x: xPos, y: yPos } });
-						console.log(`saved window coords [${xPos} | ${yPos}]`);
-					} catch (error) {
-						console.error(error);
-					}
-				}
-			}, 5000);
-		},
-		onResize: (win) => {
-			clearTimeout(resizeTimer);
-			resizeTimer = setTimeout(() => {
-				const [width, height] = win.getSize();
-				if (width && height) {
-					try {
-						store.set({
-							windowSize: { width: width, height: height },
-						});
-						console.log(`saved window size [${width} | ${height}]`);
-					} catch (error) {
-						console.error(error);
-					}
-				}
-			}, 5000);
-		},
-	});
-	initializePlugins(windows.main);
-	setApplicationMenu(windows);
+app.on("ready", async () => {
+	createStore();
+	windows.main = createMainWindow();
+	loadPlugins(windows.main);
+	setAppMenu(windows);
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common
@@ -152,7 +57,7 @@ app.on("activate", () => {
 	// On OS X it's common to re-create a window in the app when the
 	// dock icon is clicked and there are no other windows open.
 	if (BrowserWindow.getAllWindows().length === 0) {
-		createMainWindow();
+		windows.main = createMainWindow();
 	}
 });
 
@@ -161,7 +66,7 @@ app.on("activate", () => {
 
 // IPC Handlers
 ipcMain.on("fetch-plugins", async (e) => {
-	const plugins = await fetch(
+	const plugins: PluginGitHub[] = await fetch(
 		"https://api.github.com/repos/erikenz/youtube-music-desktop-add-ons/contents/plugins"
 	).then((response) => response.json());
 
@@ -174,10 +79,6 @@ ipcMain.on("download-plugin", async (_, payload: PluginGitHub) => {
 			`https://api.github.com/repos/erikenz/youtube-music-desktop-add-ons/contents/plugins/${payload.name}`
 		).then((res) => res.json());
 		if (payload.type !== "dir") return Error("Not a directory");
-		// console.log(
-		// 	`🚀 => file: main.ts:124 => ipcMain.on => pluginFolder:`,
-		// 	pluginFolder
-		// );
 		pluginFolder.forEach(async (file: PluginGitHub) => {
 			download(win, file.download_url, {
 				directory: path.join(
@@ -200,16 +101,21 @@ ipcMain.on("download-plugin", async (_, payload: PluginGitHub) => {
 		console.error(error);
 	}
 });
-// ipcMain.on("open_page", (e, page) => {
-// 	pluginInstallWindow = makeWindow(
-// 		PLUGIN_INSTALL_WINDOW_PRELOAD_WEBPACK_ENTRY,
-// 		PLUGIN_INSTALL_WINDOW_WEBPACK_ENTRY,
-// 		{
-// 			title: "Window 2",
-// 			width: 600,
-// 			height: 400,
-// 		}
-// 	);
-// });
-// const handleOpenPage = () => {};
-// ipcMain.handle("openPage", handleOpenPage);
+ipcMain.on("get-installed-plugins", (e) => {
+	const plugins = getAllPlugins();
+	const pluginConfig = store.get("plugins") as PluginConfig;
+	console.log(
+		`TCL -> file: main.ts:108 -> ipcMain.on -> pluginConfig:`,
+		pluginConfig
+	);
+
+	const pluginArr = plugins.map((plugin) => {
+		if (pluginConfig) {
+			return {
+				...plugin,
+				...pluginConfig[plugin.name],
+			};
+		}
+	});
+	e.returnValue = pluginArr;
+});

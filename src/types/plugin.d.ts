@@ -1,8 +1,16 @@
 export interface Plugin {
-	label: string;
+	name: string;
+	displayName: string;
+	start: () => void;
+	stop: () => void;
+	getConfig: () => object;
+	front?: () => void;
+	back?: () => void;
+}
+export interface PluginFiles {
+	name: string;
 	dir: string;
 	files: string[];
-	init?: () => {};
 }
 export interface PluginGitHub {
 	download_url: string | null;

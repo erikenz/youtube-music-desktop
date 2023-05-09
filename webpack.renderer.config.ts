@@ -33,6 +33,7 @@ export const rendererConfig: Configuration = {
 			"@utils": path.resolve(__dirname, "./src/utils"),
 			"@plugins": path.resolve(__dirname, "./src/plugins"),
 			"@themes": path.resolve(__dirname, "./src/themes"),
+			"@windows": path.resolve(__dirname, "./src/windows"),
 			"#types": path.resolve(__dirname, "./src/types"),
 		},
 	},

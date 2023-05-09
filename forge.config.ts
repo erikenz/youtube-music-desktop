@@ -22,15 +22,26 @@ const config: ForgeConfig = {
 			renderer: {
 				config: rendererConfig,
 				entryPoints: [
+					//? Main window
 					{
 						html: "./src/windows/index.html",
-						js: "./src/windows/home/app.tsx",
+						js: "./src/windows/main/app.tsx",
 						// js: "./src/renderer.ts",
 						name: "main_window",
 						preload: {
 							js: "./src/preload.ts",
 						},
 					},
+					//? Plugin manage window
+					{
+						html: "./src/windows/index.html",
+						js: "./src/windows/plugins-manage/index.tsx",
+						name: "plugin_manage_window",
+						preload: {
+							js: "./src/preload.ts",
+						},
+					},
+					//? Plugin install window
 					{
 						html: "./src/windows/index.html",
 						js: "./src/windows/plugins-install/index.tsx",

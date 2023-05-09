@@ -88,6 +88,7 @@ export function createWindow({
 				// devTools: !app.isPackaged,
 				devTools: true,
 			},
+
 			...windowProps,
 		});
 		// this.window = window;
@@ -157,8 +158,22 @@ export function createWindow({
 			window.show();
 			//! Disabled in testing because of hot reload
 			// win.focus();
+			const win = this;
+			// Spawn child window near parent window
+			if (windowProps?.parent) {
+				const parentCoords = windowProps.parent.getPosition();
+				const parentSize = windowProps.parent.getSize();
+				const parentCenter = {
+					x:
+						parentCoords[0] +
+						parentSize[0] / 2 -
+						win.getSize()[0] / 2 -
+						4,
+					y: parentCoords[1],
+				};
+				win.setPosition(parentCenter.x, parentCenter.y);
+			}
 			if (onReadyToShow) {
-				const win = this;
 				onReadyToShow(win);
 			}
 		});

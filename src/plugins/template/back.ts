@@ -1,4 +1,5 @@
-import type { BrowserWindow } from "electron";
+// Purpose: modify behavior or the app
 
-function plugin(win: BrowserWindow) {}
-export default plugin;
+export default function back() {
+	console.log("this if from plugins/shortcuts/back.ts");
+}

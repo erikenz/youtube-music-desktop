@@ -1,6 +1,5 @@
+import type { MainSchema, NewSchema } from "#types/config";
 import Store, { Schema } from "electron-store";
-
-import type { MainSchema } from "#types/config";
 
 export const configSchema: Schema<MainSchema> = {
 	windowPos: {
@@ -75,12 +74,38 @@ export const configSchema: Schema<MainSchema> = {
 	},
 	plugins: {
 		type: "object",
+		properties: {},
+		default: {},
+	},
+	themes: {
+		type: "object",
+		properties: {},
 		default: {},
 	},
 };
+export let store: Store<MainSchema>;
+export const createStore = () => {
+	store = new Store<MainSchema>({
+		schema: configSchema,
+		clearInvalidConfig: true,
+		accessPropertiesByDotNotation: true,
+	});
+};
 
-export const store = new Store<MainSchema>({
-	schema: configSchema,
-	clearInvalidConfig: true,
-	accessPropertiesByDotNotation: true,
-});
+export const updateStore = (
+	parent: keyof Schema<MainSchema>,
+	newSchema: Schema<NewSchema>
+) => {
+	configSchema[parent].properties = newSchema;
+	console.log(`TCL -> file: store.ts:115 -> updateStore:`, configSchema);
+	createStore();
+	console.log(
+		`TCL -> file: store.ts:117 -> updateStore:`,
+		store.get("plugins")
+	);
+};
+// export const store = new Store<MainSchema>({
+// 	schema: configSchema,
+// 	clearInvalidConfig: true,
+// 	accessPropertiesByDotNotation: true,
+// });

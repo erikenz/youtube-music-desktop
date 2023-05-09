@@ -9,9 +9,12 @@ import type {
 } from "electron";
 
 export interface Windows {
-	[window: string]: BrowserWindow | null;
+	// [window: string]: BrowserWindow | null;
 	main: BrowserWindow | null;
 	pluginsInstall: BrowserWindow | null;
+	pluginsManage: BrowserWindow | null;
+	themesManage: BrowserWindow | null;
+	themesInstall: BrowserWindow | null;
 }
 export interface WindowProps extends BrowserWindowConstructorOptions {
 	PRELOAD?: WebPreferences["preload"];

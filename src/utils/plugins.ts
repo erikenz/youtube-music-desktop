@@ -1,69 +1,68 @@
-import type { BrowserWindow, MenuItemConstructorOptions } from "electron";
+import { BrowserWindow, app } from "electron";
 import { lstatSync, readdirSync } from "fs";
+import { store, updateStore } from "@config/store";
 
+import type { NewSchema } from "#types/config";
+import type { PluginFiles } from "#types/plugin";
+import type { Schema } from "electron-store";
 import path from "path";
-// import store from "../config/store";
-import { store } from "@config/store";
 
 export function toggleEnabled(pluginName: string) {
 	store.set(pluginName, !store.get(pluginName));
 }
 
-export function getAllPlugins() {
-	const pluginsPath = path.join(__dirname, "../..", "src/plugins");
-	const dir = readdirSync(pluginsPath);
-	const rawPlugins = dir
-		.map((dirName) => path.join(pluginsPath, dirName))
+export function getAllPlugins(): PluginFiles[] {
+	const pluginsFolderPath = path.join(__dirname, "../../src/plugins");
+	const pluginsFolder = readdirSync(pluginsFolderPath)
+		.map((dir) => path.join(pluginsFolderPath, dir))
 		.filter(
-			(source) =>
-				lstatSync(source).isDirectory() &&
-				path.basename(source) !== "template"
+			(dir) =>
+				lstatSync(dir).isDirectory() &&
+				readdirSync(dir).length > 0 &&
+				path.basename(dir) !== "template" &&
+				path.basename(dir) !== "test"
 		);
-	const plugins = rawPlugins.map((dir) => {
+	const plugins = pluginsFolder.map((plugin) => {
 		return {
-			label: path.basename(dir),
-			dir,
-			files: readdirSync(dir, { withFileTypes: true }).map(
+			name: path.basename(plugin),
+			dir: plugin,
+			files: readdirSync(plugin, { withFileTypes: true }).map(
 				(file) => file.name
 			),
 		};
 	});
+
 	return plugins;
 }
-export function getAllPluginMenus(
-	win: BrowserWindow
-): MenuItemConstructorOptions[] {
-	const menuArray = getAllPlugins().map((plugin) => {
-		const hasMenu = plugin.files.includes("menu.js");
-		if (hasMenu) {
-			const menuPath = path.join(plugin.dir, "menu.js");
-			const getPluginMenu = require(menuPath);
-			const menu = getPluginMenu.default(win);
-			return menu;
-		}
-		return {
-			label: plugin.label,
-			type: "checkbox",
-			checked: store.get(`plugins.${plugin.label}.enabled`),
-			click: () =>
-				store.set(
-					`plugins.${plugin.label}.enabled`,
-					!store.get(`plugins.${plugin.label}.enabled`)
-				),
-		};
-	});
-	return menuArray;
-}
 
-export function initializePlugins(win: BrowserWindow) {
+export async function setPluginSchemas(plugins: PluginFiles[]) {
+	const schemas: Schema<NewSchema>[] = await Promise.all(
+		plugins.map(async (plugin) => {
+			const pluginData = await import(
+				/* webpackInclude: /\.mts$/ */
+				/* webpackChunkName: "plugin-data" */
+				/* webpackMode: "eager" */
+				`../plugins/${plugin.name}/index.mts`
+			);
+			const schema: Schema<NewSchema> = pluginData.default().getConfig();
+			return schema;
+		})
+	);
+	console.log(
+		`TCL -> file: plugins.ts:49 -> schemas -> schemas:`,
+		Object.assign({}, ...schemas)
+	);
+	updateStore("plugins", Object.assign({}, ...schemas));
+}
+export async function loadPlugins(win: BrowserWindow) {
 	const plugins = getAllPlugins();
 	if (!store.has("plugins")) {
 		store.set("plugins", {});
 	}
-	plugins.forEach((plugin) => {
-		const configExists = store.has(`plugins.${plugin.label}`);
-		if (!configExists) {
-			store.set(`plugins.${plugin.label}`, true);
-		}
-	});
+	// Update store with plugin schemas
+	//? Could implement function to detect if schema already exists and only update if it doesn't and have another function to override schema
+	await setPluginSchemas(plugins);
+
+	// Get enabled plugins and run each plugin startup function
+	// store.get("plugins").forEach((plugin: PluginConfig) => {})
 }
