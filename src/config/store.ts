@@ -79,8 +79,14 @@ export const configSchema: Schema<MainSchema> = {
 	},
 	themes: {
 		type: "object",
-		properties: {},
-		default: {},
+		properties: {
+			currentTheme: {
+				type: "string",
+			},
+		},
+		default: {
+			currentTheme: "dark",
+		},
 	},
 };
 export let store: Store<MainSchema>;
@@ -97,12 +103,8 @@ export const updateStore = (
 	newSchema: Schema<NewSchema>
 ) => {
 	configSchema[parent].properties = newSchema;
-	console.log(`TCL -> file: store.ts:115 -> updateStore:`, configSchema);
+
 	createStore();
-	console.log(
-		`TCL -> file: store.ts:117 -> updateStore:`,
-		store.get("plugins")
-	);
 };
 // export const store = new Store<MainSchema>({
 // 	schema: configSchema,

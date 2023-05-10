@@ -13,47 +13,167 @@ export const getPluginSchema = (): Schema<PluginConfig> => {
 					type: "object",
 					properties: {
 						next: {
-							type: "string",
+							type: "object",
+							properties: {
+								scope: {
+									type: "string",
+									enum: ["global", "local"],
+								},
+								shortcut: {
+									type: "string",
+								},
+							},
 						},
 						previous: {
-							type: "string",
+							type: "object",
+							properties: {
+								scope: {
+									type: "string",
+									enum: ["global", "local"],
+								},
+								shortcut: {
+									type: "string",
+								},
+							},
 						},
 						playPause: {
-							type: "string",
+							type: "object",
+							properties: {
+								scope: {
+									type: "string",
+									enum: ["global", "local"],
+								},
+								shortcut: {
+									type: "string",
+								},
+							},
 						},
 						volumeUp: {
-							type: "string",
+							type: "object",
+							properties: {
+								scope: {
+									type: "string",
+									enum: ["global", "local"],
+								},
+								shortcut: {
+									type: "string",
+								},
+							},
 						},
 						volumeDown: {
-							type: "string",
+							type: "object",
+							properties: {
+								scope: {
+									type: "string",
+									enum: ["global", "local"],
+								},
+								shortcut: {
+									type: "string",
+								},
+							},
 						},
 						mute: {
-							type: "string",
+							type: "object",
+							properties: {
+								scope: {
+									type: "string",
+									enum: ["global", "local"],
+								},
+								shortcut: {
+									type: "string",
+								},
+							},
 						},
 						like: {
-							type: "string",
+							type: "object",
+							properties: {
+								scope: {
+									type: "string",
+									enum: ["global", "local"],
+								},
+								shortcut: {
+									type: "string",
+								},
+							},
 						},
 						dislike: {
-							type: "string",
+							type: "object",
+							properties: {
+								scope: {
+									type: "string",
+									enum: ["global", "local"],
+								},
+								shortcut: {
+									type: "string",
+								},
+							},
 						},
 						shuffle: {
-							type: "string",
+							type: "object",
+							properties: {
+								scope: {
+									type: "string",
+									enum: ["global", "local"],
+								},
+								shortcut: {
+									type: "string",
+								},
+							},
 						},
 						repeat: {
-							type: "string",
+							type: "object",
+							properties: {
+								scope: {
+									type: "string",
+									enum: ["global", "local"],
+								},
+								shortcut: {
+									type: "string",
+								},
+							},
 						},
 					},
 					default: {
-						nextSong: "",
-						previousSong: "",
-						playPause: "",
-						volumeUp: "",
-						volumeDown: "",
-						mute: "",
-						like: "",
-						dislike: "",
-						shuffle: "",
-						repeat: "",
+						next: {
+							scope: "global",
+							shortcut: "",
+						},
+						previous: {
+							scope: "global",
+							shortcut: "",
+						},
+						playPause: {
+							scope: "global",
+							shortcut: "",
+						},
+						volumeUp: {
+							scope: "global",
+							shortcut: "",
+						},
+						volumeDown: {
+							scope: "global",
+							shortcut: "",
+						},
+						mute: {
+							scope: "global",
+							shortcut: "",
+						},
+						like: {
+							scope: "local",
+							shortcut: "",
+						},
+						dislike: {
+							scope: "local",
+							shortcut: "",
+						},
+						shuffle: {
+							scope: "local",
+							shortcut: "",
+						},
+						repeat: {
+							scope: "local",
+							shortcut: "",
+						},
 					},
 				},
 				overrideMediaKeys: {

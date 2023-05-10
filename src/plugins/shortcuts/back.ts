@@ -5,7 +5,7 @@ import { store } from "@config/store";
 
 export function registerShortcuts() {
 	if (store.has("plugins.shortcuts")) {
-		const shortcuts = store.get("shortcuts") as Shortcuts;
+		const shortcuts = store.get("plugin.shortcuts") as Shortcuts;
 		Object.entries(shortcuts).forEach((shortcut: any) => {
 			if (shortcut) {
 				globalShortcut.register(shortcut, () => {

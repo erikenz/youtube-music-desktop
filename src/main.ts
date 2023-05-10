@@ -104,10 +104,10 @@ ipcMain.on("download-plugin", async (_, payload: PluginGitHub) => {
 ipcMain.on("get-installed-plugins", (e) => {
 	const plugins = getAllPlugins();
 	const pluginConfig = store.get("plugins") as PluginConfig;
-	console.log(
-		`TCL -> file: main.ts:108 -> ipcMain.on -> pluginConfig:`,
-		pluginConfig
-	);
+	// console.log(
+	// 	`TCL -> file: main.ts:108 -> ipcMain.on -> pluginConfig:`,
+	// 	pluginConfig
+	// );
 
 	const pluginArr = plugins.map((plugin) => {
 		if (pluginConfig) {

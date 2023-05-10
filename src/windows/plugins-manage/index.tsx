@@ -1,15 +1,18 @@
 import { useEffect, useState } from "react";
 
 import Button from "@components/Button";
-import Input from "@components/Input";
+// import Input from "@components/Input";
+import type { PluginFiles } from "#types/plugin";
 import { RenderApp } from "..";
 import Spinner from "@components/Spinner";
-import ToggleButton from "@components/ToggleButton";
-import { store } from "@config/store";
+import { Switch } from "@material-tailwind/react";
+
+// import ToggleSwitch from "@components/ToggleSwitch";
+// import { store } from "@config/store";
 
 function ManagePlugins() {
 	const [loading, setLoading] = useState(true);
-	const [plugins, setPlugins] = useState([]);
+	const [plugins, setPlugins] = useState<PluginFiles[]>([]);
 	useEffect(() => {
 		document.title = "Manage Plugins";
 		setLoading(true);
@@ -49,16 +52,15 @@ function ManagePlugins() {
 					<Spinner color="red-500" size={8} />
 				) : (
 					<div id="plugins-container" className="flex flex-col">
-						{plugins.map((plugin, index) => (
+						{plugins.map((plugin: PluginFiles, index) => (
 							<div
 								className="flex justify-between my-2 p-2 bg-[#33333B] rounded-md border-[1px] border-[#54545B]"
 								key={index}>
 								<div className="flex items-center">
-									<ToggleButton></ToggleButton>
-
-									<div className="pl-2 text-[#E0E5E6]">
-										{plugin.label}
-									</div>
+									<Switch
+										id={`toggle-plugin-${plugin.name}`}
+										label={plugin.name}
+									/>
 								</div>
 								<div className="flex">
 									<div>size</div>

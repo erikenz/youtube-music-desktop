@@ -48,10 +48,6 @@ export async function setPluginSchemas(plugins: PluginFiles[]) {
 			return schema;
 		})
 	);
-	console.log(
-		`TCL -> file: plugins.ts:49 -> schemas -> schemas:`,
-		Object.assign({}, ...schemas)
-	);
 	updateStore("plugins", Object.assign({}, ...schemas));
 }
 export async function loadPlugins(win: BrowserWindow) {

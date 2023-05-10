@@ -54,14 +54,16 @@
 		"typescript": "^5.0.4"
 	},
 	"dependencies": {
+		"@heroicons/react": "^2.0.18",
+		"@material-tailwind/react": "^2.0.0",
 		"classnames": "^2.3.2",
 		"electron-dl": "^3.5.0",
 		"electron-fetch": "^1.9.1",
 		"electron-is": "^3.0.0",
 		"electron-squirrel-startup": "^1.0.0",
 		"electron-store": "^8.1.0",
+		"node-polyfill-webpack-plugin": "^2.0.1",
 		"react": "^18.2.0",
-		"react-dom": "^18.2.0",
-		"url": "^0.11.0"
+		"react-dom": "^18.2.0"
 	}
 }

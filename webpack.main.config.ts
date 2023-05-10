@@ -1,6 +1,7 @@
 import type { Configuration } from "webpack";
 import path from "path";
 import { rules } from "./webpack.rules";
+// const NodePolyfillPlugin = require("node-polyfill-webpack-plugin");
 
 export const mainConfig: Configuration = {
 	/**
@@ -31,4 +32,5 @@ export const mainConfig: Configuration = {
 			"#types": path.resolve(__dirname, "./src/types"),
 		},
 	},
+	// plugins: [new NodePolyfillPlugin()],
 };
