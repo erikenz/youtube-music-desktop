@@ -1,12 +1,16 @@
 # Release Notes
 
-## Version 0.0.1-beta - 09/05/2023
+## Version 0.7.3-beta - 19/05/2023
 
 ### New features
 
 -   Child window spawns near parent window
 -   Added function to update the store with new schemas
 -   Plugin schemas are now added into the store when loaded
+-   Plugins can be downloaded and deleted
+-   Plugins can be enabled and disabled
+-   Plugins can have a menu for configuration
+-   Added ipcHandlers
 
 ### Refactors
 

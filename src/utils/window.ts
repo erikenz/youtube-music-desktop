@@ -34,6 +34,7 @@ export const makeWindow = ({ PRELOAD, URL, ...props }: WindowProps) => {
 };
 
 export function createWindow({
+	beforeCreate,
 	urlToLoad,
 	preloadPath,
 	windowProps,
@@ -72,6 +73,9 @@ export function createWindow({
 	onSystemContextMenu,
 }: CreateWindowProps): BrowserWindow {
 	try {
+		if (beforeCreate) {
+			beforeCreate();
+		}
 		const window = new BrowserWindow({
 			show: false,
 			resizable: true,

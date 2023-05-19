@@ -28,9 +28,13 @@ export interface MainSchema {
 	url: string;
 	lang: Lang;
 	options: AppConfig;
-	plugins: object;
+	plugins: {
+		[key: string]: {};
+	};
 	themes: object;
+	pluginsRemote: object;
 }
 export interface NewSchema {
+	// enabled: boolean;
 	[key: string]: {};
 }

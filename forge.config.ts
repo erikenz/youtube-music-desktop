@@ -25,7 +25,7 @@ const config: ForgeConfig = {
 					//? Main window
 					{
 						html: "./src/windows/index.html",
-						js: "./src/windows/main/app.tsx",
+						js: "./src/windows/main/App.tsx",
 						// js: "./src/renderer.ts",
 						name: "main_window",
 						preload: {
@@ -35,7 +35,7 @@ const config: ForgeConfig = {
 					//? Plugin manage window
 					{
 						html: "./src/windows/index.html",
-						js: "./src/windows/plugins-manage/index.tsx",
+						js: "./src/windows/plugins-manage/ManagePlugins.tsx",
 						name: "plugin_manage_window",
 						preload: {
 							js: "./src/preload.ts",
@@ -44,7 +44,7 @@ const config: ForgeConfig = {
 					//? Plugin install window
 					{
 						html: "./src/windows/index.html",
-						js: "./src/windows/plugins-install/index.tsx",
+						js: "./src/windows/plugins-install/InstallPlugins.tsx",
 						name: "plugin_install_window",
 						preload: {
 							js: "./src/preload.ts",

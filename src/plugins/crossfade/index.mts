@@ -1,12 +1,12 @@
 import { Plugin } from "#types/plugin";
-import { getPluginSchema } from "./config";
+import { pluginSchema } from "./config";
 export default (): Plugin => {
 	return {
-		name: "crossfade",
+		id: "crossfade",
 		displayName: "Crossfade",
 		start: () => console.log("start plugin crossfade"),
 		stop: () => console.log("stop plugin crossfade"),
-		getConfig: getPluginSchema,
+		schema: pluginSchema,
 	};
 };
 // const index: Export = {

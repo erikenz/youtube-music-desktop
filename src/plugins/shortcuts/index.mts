@@ -1,14 +1,17 @@
 import { registerShortcuts, unregisterShortcuts } from "./back";
 
 import { Plugin } from "#types/plugin";
-import { getPluginSchema } from "./config";
+import { pluginMenu } from "./menu";
+import { pluginSchema } from "./config";
+
 export default (): Plugin => {
 	return {
-		name: "shortcuts",
+		id: "shortcuts",
 		displayName: "Global Shortcuts",
 		start: registerShortcuts,
 		stop: unregisterShortcuts,
-		getConfig: getPluginSchema,
+		schema: pluginSchema,
+		menu: pluginMenu,
 	};
 };
 // const index: Export = {

@@ -26,7 +26,7 @@
  * ```
  */
 
-import "./windows/home/app";
+// import "./windows/home/app";
 import "./global.css";
 
 console.log(

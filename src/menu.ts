@@ -1,8 +1,6 @@
-import { BrowserWindow, Menu, MenuItemConstructorOptions } from "electron";
-
+import { MenuItemConstructorOptions } from "electron";
 import type { Windows } from "#types/window";
 import { createWindow } from "@utils/window";
-import path from "path";
 
 // Plugin Install Window
 // declare const PLUGIN_INSTALL_WINDOW_WEBPACK_ENTRY: string;
@@ -19,11 +17,8 @@ export function mainMenuTemplate(
 ): MenuItemConstructorOptions[] {
 	return [
 		{
-			label: "Settings",
+			label: "Extensions",
 			submenu: [
-				{
-					label: "Preferences",
-				},
 				{
 					label: "Plugins",
 					click: () => {
@@ -41,79 +36,27 @@ export function mainMenuTemplate(
 						});
 						windows.pluginsManage.webContents.openDevTools();
 					},
-					// submenu: [
-					// 	{
-					// 		label: "Manage plugins",
-					// 		click: () => {
-					// 			// Open plugins configuration
-					// 			const store = new BrowserWindow({
-					// 				width: 400,
-					// 				height: 400,
-					// 				parent: windows.main,
-					// 			});
-					// 			console.log("dirname => ", __dirname);
-					// 			store.loadURL(
-					// 				path.join(
-					// 					__dirname,
-					// 					"../../src/components/plugins/manage/index.html"
-					// 				)
-					// 			);
-					// 		},
-					// 	},
-					// 	{
-					// 		label: "Install plugins",
-					// 		click: () => {
-					// 			windows.pluginsInstall = makeWindow({
-					// 				URL: PLUGIN_INSTALL_WINDOW_WEBPACK_ENTRY,
-					// 				title: "Install Plugins",
-					// 				// width: 600,
-					// 				// height: 400,
-					// 				parent: windows.main,
-					// 			});
-					// 			windows.pluginsInstall.webContents.openDevTools();
-					// 		},
-					// 	},
-					// ],
 				},
 				{
-					label: "Themes",
-					submenu: [
-						{
-							label: "Manage themes",
-							click: () => {
-								const store = new BrowserWindow({
-									width: 400,
-									height: 400,
-									parent: windows.main,
-								});
-								store.loadFile(
-									path.join(
-										__dirname,
-										"../src/components/themes/manage/index.html"
-									)
-								);
-							},
-						},
-						{
-							label: "Install themes",
-							click: () => {
-								// Open plugins store
-								const store = new BrowserWindow({
-									width: 400,
-									height: 400,
-									parent: windows.main,
-								});
-								store.loadFile(
-									path.join(
-										__dirname,
-										"../src/components/themes/install/index.html"
-									)
-								);
-							},
-						},
-					],
+					label: "Manage themes",
+					click: () => {
+						// const store = new BrowserWindow({
+						// 	width: 400,
+						// 	height: 400,
+						// 	parent: windows.main,
+						// });
+						// store.loadFile(
+						// 	path.join(
+						// 		__dirname,
+						// 		"../src/components/themes/manage/index.html"
+						// 	)
+						// );
+					},
 				},
 			],
+		},
+		{
+			label: "Preferences",
 		},
 		{
 			label: "View",

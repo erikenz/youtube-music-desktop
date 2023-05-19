@@ -88,6 +88,11 @@ export const configSchema: Schema<MainSchema> = {
 			currentTheme: "dark",
 		},
 	},
+	pluginsRemote: {
+		type: "object",
+		properties: {},
+		default: {},
+	},
 };
 export let store: Store<MainSchema>;
 export const createStore = () => {

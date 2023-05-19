@@ -22,6 +22,7 @@ export interface WindowProps extends BrowserWindowConstructorOptions {
 }
 
 export interface CreateWindowProps {
+	beforeCreate?: () => void;
 	urlToLoad: string;
 	preloadPath?: string;
 	windowProps?: BrowserWindowConstructorOptions;
@@ -92,4 +93,7 @@ export interface CreateWindowProps {
 		isAlwaysOnTop: boolean,
 		win?: BrowserWindow
 	) => void;
+}
+export interface CreateInstallPluginsWindowProps {
+	windows: Windows;
 }
