@@ -1,7 +1,16 @@
 import type { MainSchema, NewSchema } from "#types/config";
 import { Stats } from "fs";
 import type { Schema } from "electron-store";
-export interface Plugin {
+
+export interface PluginMenuConstructorOptions {
+	label?: { text: string; position?: "outside" | "inside" };
+	type?: "input" | "shortcut" | "select" | "checkbox" | "button";
+	options?: string[] | number[];
+	defaultValue?: any;
+	submenu?: PluginMenuConstructorOptions[];
+	saveLocation?: string;
+}
+export interface PluginExport {
 	id: string;
 	displayName: string;
 	start: () => void;
@@ -11,15 +20,7 @@ export interface Plugin {
 	back?: () => void;
 	menu?: PluginMenuConstructorOptions[];
 }
-export interface PluginFiles {
-	name: string;
-	dir: string;
-	files: {
-		fileName: string;
-		stats: Stats;
-	}[];
-	totalSize: number;
-}
+export type InstalledPlugins = string[];
 export interface PluginGitHub {
 	download_url: string | null;
 	git_url: string;
@@ -36,28 +37,42 @@ export interface PluginGitHub {
 		self: string;
 	};
 }
-export interface PluginDataOld {
-	files: PluginFiles;
-	config: {
-		enabled: boolean;
-		[key: string]: any;
-	};
+export interface FetchPlugin extends PluginGitHub {
+	id: string;
+	displayName: string;
+	description: string;
+	version: string;
+	author: string;
 }
+
 export interface UpdatePluginConfig {
 	property: object | string;
 	newConfig: object | string | number | boolean | Array<any>;
 }
+
 export interface DeletePlugin {
 	name: string;
 }
-export interface PluginMenuConstructorOptions {
-	label?: { text: string; position?: "outside" | "inside" };
-	type?: "input" | "shortcut" | "select" | "checkbox" | "button";
-	options?: string[] | number[];
-	defaultValue?: any;
-	submenu?: PluginMenuConstructorOptions[];
-	saveLocation?: string;
+
+export interface PluginSchema {
+	[key: string]: {
+		config: {
+			enabled: boolean;
+			[key: string]: any;
+		};
+		// files: {
+		// 	dirName: string;
+		// 	path: string;
+		// 	files: {
+		// 		fileName: string;
+		// 		stats: Stats;
+		// 	}[];
+		// 	totalSize: number;
+		// };
+		github: PluginGitHub;
+	};
 }
+
 export interface PluginData {
 	id: string;
 	displayName: string;

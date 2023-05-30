@@ -82,7 +82,7 @@ export function createWindow({
 			maximizable: true,
 			transparent: false,
 			autoHideMenuBar: true,
-			backgroundColor: "#23272E",
+			backgroundColor: "#040305",
 			webPreferences: {
 				preload: preloadPath,
 				nodeIntegration: false,

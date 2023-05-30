@@ -13,3 +13,45 @@ html {
 	height: 100%;
 	width: 100%;
 }
+
+@keyframes text-open {
+	0% {
+		line-clamp: 2;
+		-webkit-line-clamp: 2;
+	}
+	100% {
+		line-clamp: initial;
+		-webkit-line-clamp: initial;
+	}
+}
+
+@keyframes text-close {
+	0% {
+		line-clamp: initial;
+		-webkit-line-clamp: initial;
+	}
+	100% {
+		line-clamp: 2;
+		-webkit-line-clamp: 2;
+	}
+}
+@layer utilities {
+	.read-more-text {
+		display: -webkit-box;
+		-webkit-box-orient: vertical;
+		text-overflow: ellipsis;
+		overflow: hidden;
+		animation-name: text-close;
+		animation-duration: 0.1s;
+		animation-timing-function: ease-out;
+		animation-fill-mode: forwards;
+		animation-delay: 0s;
+	}
+	.read-more-text-open {
+		animation-name: open;
+		animation-duration: 0.1s;
+		animation-timing-function: ease-in;
+		animation-fill-mode: forwards;
+		animation-delay: 0s;
+	}
+}

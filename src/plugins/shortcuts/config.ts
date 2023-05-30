@@ -4,10 +4,6 @@ export const pluginSchema: Schema<PluginConfig> = {
 	shortcuts: {
 		type: "object",
 		properties: {
-			enabled: {
-				type: "boolean",
-				default: true,
-			},
 			actions: {
 				type: "object",
 				properties: {

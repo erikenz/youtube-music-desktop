@@ -1,5 +1,18 @@
 # Release Notes
 
+## Version 1.7.4-beta - 29/05/2023
+
+### New Features
+
+-   Added styles to the plugins window
+-   Implemented loading animation while installing a plugin
+-   Added @material-tailwind/react to help with components and styling
+-   Added @heroicons/react for icons
+
+### Refactors
+
+-   The plugins window now contains both the install plugin and browse plugin windows
+
 ## Version 0.7.3-beta - 19/05/2023
 
 ### New features

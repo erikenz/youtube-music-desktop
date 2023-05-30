@@ -1,6 +1,6 @@
-import { Plugin } from "#types/plugin";
+import { PluginExport } from "#types/plugin";
 import { getPluginSchema } from "./config";
-export default (): Plugin => {
+export default (): PluginExport => {
 	return {
 		name: "name", //Name of the plugin
 		displayName: "displayName", //Name displayed in the store

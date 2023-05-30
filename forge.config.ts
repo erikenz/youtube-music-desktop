@@ -25,44 +25,23 @@ const config: ForgeConfig = {
 					//? Main window
 					{
 						html: "./src/windows/index.html",
-						js: "./src/windows/main/App.tsx",
-						// js: "./src/renderer.ts",
+						// js: "./src/windows/main/App.tsx",
+						js: "./src/renderer.ts",
 						name: "main_window",
 						preload: {
 							js: "./src/preload.ts",
 						},
 					},
-					//? Plugin manage window
+					//? Plugins window
 					{
 						html: "./src/windows/index.html",
-						js: "./src/windows/plugins-manage/ManagePlugins.tsx",
-						name: "plugin_manage_window",
+						js: "./src/windows/plugins/Plugins.tsx",
+						name: "plugins_window",
 						preload: {
-							js: "./src/preload.ts",
+							// js: "./src/preload.ts",
+							js: "./src/windows/plugins/preload.ts",
 						},
 					},
-					//? Plugin install window
-					{
-						html: "./src/windows/index.html",
-						js: "./src/windows/plugins-install/InstallPlugins.tsx",
-						name: "plugin_install_window",
-						preload: {
-							js: "./src/preload.ts",
-						},
-					},
-					// {
-					// 	html: "./src/components/plugins/manage/index.html",
-					// 	js: "./src/renderer.ts",
-					// 	name: "plugin_manage_window",
-					// },
-					// {
-					// 	html: "./src/components/store/plugins/install.html",
-					// 	js: "./src/components/store/plugins/renderer.ts",
-					// 	name: "plugin_install_window",
-					// 	// preload: {
-					// 	// 	js: "./src/preload.ts",
-					// 	// },
-					// },
 				],
 			},
 			devServer: {

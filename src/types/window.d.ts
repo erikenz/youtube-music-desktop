@@ -15,6 +15,9 @@ export interface Windows {
 	pluginsManage: BrowserWindow | null;
 	themesManage: BrowserWindow | null;
 	themesInstall: BrowserWindow | null;
+	extensions: BrowserWindow | null;
+	plugins: BrowserWindow | null;
+	themes: BrowserWindow | null;
 }
 export interface WindowProps extends BrowserWindowConstructorOptions {
 	PRELOAD?: WebPreferences["preload"];

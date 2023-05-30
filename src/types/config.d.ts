@@ -1,3 +1,5 @@
+import { PluginGitHub } from "#types/plugin";
+
 export type Lang = "en" | "es";
 
 export interface WindowPos {
@@ -29,12 +31,19 @@ export interface MainSchema {
 	lang: Lang;
 	options: AppConfig;
 	plugins: {
-		[key: string]: {};
+		[key: string]: {
+			enabled: boolean;
+			[key: string]: any;
+			github: PluginGitHub;
+		};
 	};
 	themes: object;
 	pluginsRemote: object;
 }
 export interface NewSchema {
-	// enabled: boolean;
-	[key: string]: {};
+	[key: string]: {
+		enabled: boolean;
+		[key: string]: any;
+		github: PluginGitHub;
+	};
 }

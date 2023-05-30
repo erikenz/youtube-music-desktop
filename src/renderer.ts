@@ -27,10 +27,11 @@
  */
 
 // import "./windows/home/app";
-import "./global.css";
+// import "./global.css";
 
 console.log(
 	'👋 This message is being logged by "renderer.js", included via webpack'
 );
 
 // window.electronAPI.loadPreferences();
+// console.log(window.electronAPI.ping());

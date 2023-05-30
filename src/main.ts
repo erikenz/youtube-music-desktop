@@ -1,23 +1,24 @@
-import { BrowserWindow, app, ipcMain } from "electron";
+import { BrowserWindow, app, ipcMain, session, shell } from "electron";
 import type {
 	DeletePlugin,
-	PluginDataOld,
+	FetchPlugin,
+	PluginExport,
 	PluginGitHub,
 	UpdatePluginConfig,
 } from "#types/plugin";
+import type { MainSchema, NewSchema } from "#types/config";
 import { createStore, store } from "@config/store";
 import { existsSync, rmSync } from "fs";
-import { getAllPlugins, getPlugins, loadPlugins } from "@utils/plugins";
+import { getInstalledPlugins, getPlugins, loadPlugins } from "@utils/plugins";
 
-import type { MainSchema } from "#types/config";
-import type { PluginConfig } from "#types/config";
+import { Schema } from "electron-store";
 import type { Windows } from "#types/window";
 import { createMainWindow } from "@windows/main";
-import { createPluginsInstallWindow } from "@windows/plugins-install/create";
 import { download } from "electron-dl";
+import is from "electron-is";
 import { join } from "path";
-import { plugins } from "./../webpack.plugins";
 import { setAppMenu } from "@utils/menu";
+import { updateStore } from "@config/store";
 
 console.log("youtube-music-desktop started");
 
@@ -41,14 +42,31 @@ export const windows: Windows = {
 	pluginsManage: null,
 	themesInstall: null,
 	themesManage: null,
+	extensions: null,
+	plugins: null,
+	themes: null,
 };
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on("ready", async () => {
+	// session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
+	// 	callback({
+	// 		responseHeaders: {
+	// 			...details.responseHeaders,
+	// 			"Content-Security-Policy": [
+	// 				"script-src 'https://music.youtube.com' 'unsafe-inline' 'unsafe-eval' 'unsafe-hashes' 'self'",
+	// 				"script-src-elem 'https://music.youtube.com' 'unsafe-inline' 'unsafe-eval' 'unsafe-hashes' 'self'",
+	// 			],
+	// 		},
+	// 	});
+	// });
 	createStore();
 	windows.main = createMainWindow();
+	if (is.dev()) {
+		windows.main.webContents.openDevTools();
+	}
 	loadPlugins(windows.main);
 	setAppMenu(windows);
 });
@@ -74,16 +92,38 @@ app.on("activate", () => {
 // code. You can also put them in separate files and import them here.
 
 // IPC Handlers
-ipcMain.on("open-install-plugin-window", () => {
-	windows.pluginsInstall = createPluginsInstallWindow({ windows });
-	windows.pluginsInstall.webContents.openDevTools();
+ipcMain.on("ping", (e) => {
+	console.log("pingEvent", e);
+	e.returnValue = "pong";
 });
 ipcMain.handle("fetch-plugins", async () => {
-	const plugin: PluginGitHub = await fetch(
+	const plugins: FetchPlugin[] = await fetch(
 		`https://api.github.com/repos/erikenz/youtube-music-desktop-add-ons/contents/plugins`
-	).then((response) => response.json());
+	)
+		.then((response) => response.json())
+		.then(
+			async (plugins) =>
+				await Promise.all(
+					plugins.map(async (plugin: PluginGitHub) => {
+						const info = await fetch(
+							`https://raw.githubusercontent.com/erikenz/youtube-music-desktop-add-ons/master/${plugin.path}/plugin.json`
+						).then((res) => res.json());
+						if (!info) {
+							return {
+								...plugin,
+								id: "pluginId",
+								displayName: "pluginDisplayName",
+								version: "pluginVersion",
+								description: "pluginDescription",
+								author: "pluginAuthor",
+							};
+						}
+						return { ...plugin, ...info };
+					})
+				)
+		);
 
-	return plugin;
+	return plugins;
 });
 ipcMain.handle("fetch-plugin", async (_, pluginName: string) => {
 	const plugin: PluginGitHub = await fetch(
@@ -115,86 +155,124 @@ ipcMain.on("download-plugin", async (e, payload: PluginGitHub) => {
 			},
 			0
 		);
-		console.log(
-			`TCL -> file: main.ts:104 -> pluginSize -> pluginSize:`,
-			pluginSize
-		);
 		pluginFolder.forEach(async (file: PluginGitHub) => {
-			console.log(`downloading file: `, file.name);
-			const pluginDownload = download(
-				windows.pluginsInstall,
-				file.download_url,
-				{
-					directory: join(
-						app.getPath("userData"),
-						"plugins",
-						payload.name
-					),
-					onProgress(progress) {
-						// console.log("Progress:", progress);
-					},
-					onTotalProgress(totalProgress) {
-						// console.log("Total:", totalProgress);
-						console.log(
-							`Total progress: ${
-								totalProgress.transferredBytes
-							} / ${pluginSize} => ${
-								totalProgress.transferredBytes / pluginSize
-							}`
-						);
-						// windows.pluginsInstall.webContents.send(
-						// 	"download-progress",
-						// 	totalProgress
-						// );
-						e.sender.send(
-							"download-progress",
-							totalProgress.transferredBytes === 0
-								? 0
-								: totalProgress.transferredBytes / pluginSize
-						);
-					},
-					onCompleted(item) {
-						// console.log("Completed:", item);
-						windows.pluginsInstall.webContents.send(
-							"download-completed",
-							item
-						);
-					},
-					onCancel(item) {
-						console.log("Cancelled:", item);
-					},
-					overwrite: true,
-				}
-			);
+			download(windows.pluginsInstall, file.download_url, {
+				directory: join(
+					app.getPath("userData"),
+					"plugins",
+					payload.name
+				),
+				onTotalProgress(totalProgress) {
+					e.sender.send(
+						"download-progress",
+						totalProgress.transferredBytes === 0
+							? 0
+							: totalProgress.transferredBytes / pluginSize
+					);
+				},
+				onCompleted(item) {
+					windows.pluginsInstall.webContents.send(
+						"download-completed",
+						item
+					);
+				},
+				onCancel(item) {
+					console.log("Cancelled:", item);
+				},
+				overwrite: true,
+			});
 		});
 	} catch (error) {
 		console.error(error);
 	}
 });
-
-ipcMain.on("get-installed-plugins", (e) => {
-	const plugins = getAllPlugins();
-	const pluginConfig = store.get("plugins") as PluginConfig;
-	// console.log(
-	// 	`TCL -> file: main.ts:108 -> ipcMain.on -> pluginConfig:`,
-	// 	pluginConfig
-	// );
-
-	const pluginArr: PluginDataOld[] = plugins.map((plugin) => {
-		if (pluginConfig) {
-			return {
-				files: {
-					...plugin,
+ipcMain.on("install-plugin", async (e, payload: PluginGitHub) => {
+	try {
+		//download plugin from github
+		if (payload.type !== "dir") return Error("Not a directory");
+		const pluginFolder = await fetch(
+			`https://api.github.com/repos/erikenz/youtube-music-desktop-add-ons/contents/plugins/${payload.name}`
+		).then((res) => res.json());
+		const pluginSize = pluginFolder.reduce(
+			(acc: number, file: PluginGitHub) => {
+				return acc + file.size;
+			},
+			0
+		);
+		pluginFolder.forEach(async (file: PluginGitHub) => {
+			download(windows.pluginsInstall, file.download_url, {
+				directory: join(
+					app.getPath("userData"),
+					"plugins",
+					payload.name
+				),
+				onTotalProgress(totalProgress) {
+					e.sender.send(
+						"download-progress",
+						totalProgress.transferredBytes === 0
+							? 0
+							: totalProgress.transferredBytes / pluginSize
+					);
 				},
-				config: {
-					...pluginConfig[plugin.name],
+				onCompleted(item) {
+					windows.pluginsInstall.webContents.send(
+						"download-completed",
+						item
+					);
 				},
-			};
-		}
-	});
-	e.returnValue = pluginArr;
+				onCancel(item) {
+					console.log("Cancelled:", item);
+				},
+				overwrite: true,
+			});
+		});
+		//read plugin config from file
+
+		const pluginDataRaw = await import(
+			/* webpackInclude: /\.mts$/ */
+			/* webpackChunkName: "plugin-data" */
+			/* webpackMode: "eager" */
+			join(app.getPath("userData"), `plugins/${payload.name}/index.mts`)
+		);
+		const pluginData: PluginExport = pluginDataRaw.default();
+		const schema: Schema<NewSchema> = pluginData.schema;
+		console.log(
+			`TCL -> file: main.ts:197 -> ipcMain.on -> schema:`,
+			schema
+		);
+
+		//save config to store
+		updateStore("plugins", schema);
+	} catch (error) {
+		console.error(error);
+	}
 });
+// ipcMain.on("get-installed-plugins", (e) => {
+// 	const plugins = getAllPlugins();
+// 	const pluginConfig = store.get("plugins") as PluginConfig;
+// 	// console.log(
+// 	// 	`TCL -> file: main.ts:108 -> ipcMain.on -> pluginConfig:`,
+// 	// 	pluginConfig
+// 	// );
 
+// 	const pluginArr: PluginDataOld[] = plugins.map((plugin) => {
+// 		if (pluginConfig) {
+// 			return {
+// 				files: {
+// 					...plugin,
+// 				},
+// 				config: {
+// 					...pluginConfig[plugin.name],
+// 				},
+// 			};
+// 		}
+// 	});
+// 	e.returnValue = pluginArr;
+// });
+ipcMain.handle("get-installed-plugins", () => {
+	const installed = getInstalledPlugins();
+	return installed;
+});
 ipcMain.handle("get-plugins-data", async () => {
 	const pluginsData = await getPlugins();
 	return JSON.stringify(pluginsData);
@@ -225,4 +303,7 @@ ipcMain.on("delete-plugin", (_, payload: DeletePlugin) => {
 ipcMain.on("get-current-theme", (e) => {
 	const currentTheme = store.get("themes.currentTheme");
 	e.returnValue = currentTheme;
+});
+ipcMain.on("open-link", (_, payload: string) => {
+	shell.openExternal(payload);
 });

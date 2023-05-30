@@ -1,10 +1,10 @@
 import { registerShortcuts, unregisterShortcuts } from "./back";
 
-import { Plugin } from "#types/plugin";
+import { PluginExport } from "#types/plugin";
 import { pluginMenu } from "./menu";
 import { pluginSchema } from "./config";
 
-export default (): Plugin => {
+export default (): PluginExport => {
 	return {
 		id: "shortcuts",
 		displayName: "Global Shortcuts",

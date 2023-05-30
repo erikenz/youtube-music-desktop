@@ -1,6 +1,6 @@
-import { Plugin } from "#types/plugin";
+import { PluginExport } from "#types/plugin";
 import { pluginSchema } from "./config";
-export default (): Plugin => {
+export default (): PluginExport => {
 	return {
 		id: "crossfade",
 		displayName: "Crossfade",

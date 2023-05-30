@@ -5,21 +5,18 @@ import { ReactNode, StrictMode } from "react";
 import { ThemeProvider } from "@material-tailwind/react";
 import { createRoot } from "react-dom/client";
 
-const customTheme = window.electronAPI.getCurrentTheme();
 const root = createRoot(document.getElementById("root"));
 
-// export const RenderApp = (Child: ReactNode) => root.render(Child);
-export const RenderApp = (Child: ReactNode) =>
-	root.render(
+const Render = ({ children }: { children: ReactNode }) => {
+	const customTheme = window.pluginAPI.getCurrentTheme();
+
+	return (
 		<StrictMode>
-			<ThemeProvider value={customTheme}>{Child}</ThemeProvider>
+			<ThemeProvider value={customTheme}>{children}</ThemeProvider>
 		</StrictMode>
 	);
+};
 
-// root.render(
-// 	<StrictMode>
-// 		<ThemeProvider>
-// 			<App />
-// 		</ThemeProvider>
-// 	</StrictMode>
-// );
+export const RenderApp = (Child: ReactNode) => {
+	root.render(<Render>{Child}</Render>);
+};

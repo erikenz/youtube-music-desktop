@@ -21,7 +21,6 @@
 		// "jsx": "react-jsx",
 		"paths": {
 			"*": ["node_modules/*"],
-			"@src/*": ["src/*"],
 			"@plugins/*": ["src/plugins/*"],
 			"@themes/*": ["src/themes/*"],
 			"@config/*": ["src/config/*"],

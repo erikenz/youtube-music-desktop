@@ -5,22 +5,30 @@ import {
 	DialogFooter,
 	DialogHeader,
 } from "@material-tailwind/react";
+
+import type { PluginData } from "#types/plugin";
+
 interface DeletePluginDialogProps {
+	currentPlugin: PluginData | null;
 	open: boolean;
 	handler: () => void;
-	onDelete: () => void;
-	onCancel: () => void;
 }
 export default function DeletePluginDialog({
+	currentPlugin,
 	open,
 	handler,
-	onDelete,
-	onCancel,
 }: DeletePluginDialogProps) {
+	if (!currentPlugin || !currentPlugin.displayName) return null;
+
+	const handleDelete = () => {
+		window.electronAPI.deletePlugin({
+			name: currentPlugin.id,
+		});
+	};
 	return (
 		<Dialog open={open} handler={handler} size="lg">
 			<DialogHeader>
-				Are you sure you want to delete the plugin?
+				{`Are you sure you want to delete the plugin "${currentPlugin.displayName}"?`}
 			</DialogHeader>
 			<DialogBody divider>
 				All the plugin files and configurations will be deleted.
@@ -29,11 +37,11 @@ export default function DeletePluginDialog({
 				<Button
 					variant="text"
 					color="gray"
-					onClick={onCancel}
+					onClick={handler}
 					className="mr-1">
 					<span>Cancel</span>
 				</Button>
-				<Button variant="gradient" color="red" onClick={onDelete}>
+				<Button variant="gradient" color="red" onClick={handleDelete}>
 					<span>Delete</span>
 				</Button>
 			</DialogFooter>
